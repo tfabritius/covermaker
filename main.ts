@@ -1,5 +1,4 @@
 import sharp from "npm:sharp@0.33.0";
-import * as fs from "node:fs";
 
 function shouldRotateImage(
   width: number,
@@ -99,7 +98,7 @@ async function processImage(
     },
   ]).toBuffer();
 
-  fs.writeFileSync(outputFilePath, finalImageBuffer);
+  Deno.writeFileSync(outputFilePath, finalImageBuffer);
 }
 
 import { parse } from "https://deno.land/std@0.117.0/flags/mod.ts";
