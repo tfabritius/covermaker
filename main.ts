@@ -43,7 +43,11 @@ function parseNumberOrFraction(input: string): number | null {
   return null;
 }
 
-async function openAndRotate(filePath: string, aspectRatio: number) {
+async function openAndRotate(
+  filePath: string,
+  rotate: "on" | "off" | "auto",
+  aspectRatio: number,
+) {
   let image = sharp(filePath);
   let { width, height } = await image.metadata();
   if (!width || !height) {
@@ -51,10 +55,11 @@ async function openAndRotate(filePath: string, aspectRatio: number) {
     Deno.exit(1);
   }
 
-  const rotate = shouldRotateImage(width, height, aspectRatio);
-
-  if (rotate) {
-    console.debug("[DEBUG] Auto-rotating image");
+  if (
+    rotate === "on" ||
+    (rotate == "auto" && shouldRotateImage(width, height, aspectRatio))
+  ) {
+    console.debug("[DEBUG] Rotating image");
 
     image = image.rotate(90);
     [width, height] = [height, width];
@@ -65,11 +70,13 @@ async function openAndRotate(filePath: string, aspectRatio: number) {
 
 async function processImage(
   filePath: string,
+  rotate: "on" | "off" | "auto",
   aspectRatio: number,
   outputFilePath: string,
 ) {
   const { image, width: origWidth, height: origHeight } = await openAndRotate(
     filePath,
+    rotate,
     aspectRatio,
   );
 
@@ -106,6 +113,7 @@ import { parse } from "https://deno.land/std@0.117.0/flags/mod.ts";
 const args = parse(Deno.args, {
   string: [
     "ratio", // -r or --ratio will be treated as a string
+    "rotate",
   ],
   alias: {
     r: "ratio", // alias -r to --ratio
@@ -113,6 +121,7 @@ const args = parse(Deno.args, {
   },
   default: {
     ratio: 1.5,
+    rotate: "auto",
     help: false, // default value for --help is false
   },
   unknown: (option) => {
@@ -136,6 +145,7 @@ Usage: deno run --allow-read script.ts [OPTIONS] [FILES]
 
 Options:
   -r, --ratio <value>  Set the target aspect ratio value (default: 1.5)
+  --rotate on|off|auto Rotate the image by 90°
   -h, --help           Show this help message and exit
 
 Example:
@@ -147,6 +157,14 @@ const aspectRatio = parseNumberOrFraction(args.ratio);
 if (!aspectRatio) {
   console.error(
     "Invalid aspect ratio, expected number (1.5) or fraction (3/2)",
+  );
+  Deno.exit(1);
+}
+
+const rotate = args.rotate;
+if (rotate !== "auto" && rotate !== "on" && rotate !== "off") {
+  console.error(
+    "Invalid rotate option, allowed: on, off and auto",
   );
   Deno.exit(1);
 }
@@ -164,7 +182,7 @@ for (const inputFile of args._.map(String)) {
   const [, name, extension] = fileNameParts;
   const outputFile = `${name}-converted${extension}`;
 
-  await processImage(inputFile, aspectRatio, outputFile);
+  await processImage(inputFile, rotate, aspectRatio, outputFile);
 
   console.log(`Written ${outputFile}.`);
 }
