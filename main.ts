@@ -72,6 +72,7 @@ async function processImage(
   filePath: string,
   rotate: "on" | "off" | "auto",
   aspectRatio: number,
+  blur: number,
   outputFilePath: string,
 ) {
   const { image, width: origWidth, height: origHeight } = await openAndRotate(
@@ -91,7 +92,7 @@ async function processImage(
     `[DEBUG] Resizing: ${origWidth}/${origHeight} -> ${width}/${height} (w/h)`,
   );
 
-  const sigma = Math.max(width, height) / 100;
+  const sigma = blur * Math.max(width, height) / 100;
   const resizedImage = image.resize(width, height).blur(sigma);
 
   const offsetX = Math.round((width - origWidth) / 2);
@@ -112,14 +113,17 @@ import { parse } from "https://deno.land/std@0.117.0/flags/mod.ts";
 
 const args = parse(Deno.args, {
   string: [
+    "blur",
     "ratio", // -r or --ratio will be treated as a string
     "rotate",
   ],
   alias: {
+    b: "blur",
     r: "ratio", // alias -r to --ratio
     h: "help", // alias -h to --help
   },
   default: {
+    blur: 1,
     ratio: 1.5,
     rotate: "auto",
     help: false, // default value for --help is false
@@ -144,6 +148,7 @@ function showHelp() {
 Usage: deno run --allow-read script.ts [OPTIONS] [FILES]
 
 Options:
+  -b, --blur <value>   Set the blur factor (default: 1.0)
   -r, --ratio <value>  Set the target aspect ratio value (default: 1.5)
   --rotate on|off|auto Rotate the image by 90°
   -h, --help           Show this help message and exit
@@ -157,6 +162,14 @@ const aspectRatio = parseNumberOrFraction(args.ratio);
 if (!aspectRatio) {
   console.error(
     "Invalid aspect ratio, expected number (1.5) or fraction (3/2)",
+  );
+  Deno.exit(1);
+}
+
+const blur = parseFloat(args.blur);
+if (isNaN(blur)) {
+  console.error(
+    "Invalid blur factor, expected number",
   );
   Deno.exit(1);
 }
@@ -182,7 +195,7 @@ for (const inputFile of args._.map(String)) {
   const [, name, extension] = fileNameParts;
   const outputFile = `${name}-converted${extension}`;
 
-  await processImage(inputFile, rotate, aspectRatio, outputFile);
+  await processImage(inputFile, rotate, aspectRatio, blur, outputFile);
 
   console.log(`Written ${outputFile}.`);
 }
