@@ -111,7 +111,13 @@ async function processImage(
 
 import { parse } from "https://deno.land/std@0.117.0/flags/mod.ts";
 
-const args = parse(Deno.args, {
+const command = Deno.args[0];
+if (command !== "enlarge") {
+  console.error(`Unknown command: ${command}`);
+  Deno.exit(1);
+}
+
+const args = parse(Deno.args.slice(1), {
   string: [
     "blur",
     "ratio", // -r or --ratio will be treated as a string
@@ -145,16 +151,19 @@ if (args.help) {
 
 function showHelp() {
   console.log(`
-Usage: deno run -A main.ts [OPTIONS] [FILES]
+Usage: deno run -A main.ts <COMMAND> [OPTIONS] [FILES]
 
-Options:
+Commands:
+  enlarge              Enlarge images to a given aspect ratio
+
+Options for command "enlarge":
   -b, --blur <value>   Set the blur factor (default: 1.0)
   -r, --ratio <value>  Set the target aspect ratio value (default: 3/2 or 1.5)
   --rotate on|off|auto Rotate the image by 90° (default: auto)
   -h, --help           Show this help message and exit
 
 Example:
-  deno run -A main.ts -r 75/50 image1.png image2.jpg
+  deno run -A main.ts enlarge -r 75/50 image1.png image2.jpg
   `);
 }
 
