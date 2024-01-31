@@ -1,6 +1,8 @@
 # Covermaker
 
-Little image manipulation tool to resize images to a different aspect ratio by adding some fuzzy background.
+Little image manipulation tool to create covers.
+ - Resizes images to a different aspect ratio by adding some fuzzy background
+ - Merge four images into one for easier printing
 
 ## Usage
 
