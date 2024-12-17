@@ -30,18 +30,31 @@ const allImagesSelected = computed<boolean | 'indeterminate'>({
 
 const mergeStore = useMergeStore()
 
-function loadDemoImages() {
-  const files = demoImages.map((f) => {
-    const [metaData, base64Data] = f.dataURL.split(',')
-    const binaryData = atob(base64Data)
-    const arrayBuffer = new ArrayBuffer(binaryData.length)
-    const uint8Array = new Uint8Array(arrayBuffer)
-    for (let i = 0; i < binaryData.length; i++) {
-      uint8Array[i] = binaryData.charCodeAt(i)
+async function loadDemoImages() {
+  const demoImages = [
+    {
+      sourceURL: 'https://commons.wikimedia.org/wiki/File:Claude_Monet_The_Cliffs_at_Etretat.jpg',
+      filename: 'Claude_Monet_The_Cliffs_at_Etretat.jpg',
+    },
+    {
+      sourceURL: 'https://commons.wikimedia.org/wiki/File:Edvard_Munch,_1893,_The_Scream,_oil,_tempera_and_pastel_on_cardboard,_91_x_73_cm,_National_Gallery_of_Norway.jpg',
+      filename: 'Edvard_Munch,_1893,_The_Scream.jpg',
+    },
+    {
+      sourceURL: 'https://commons.wikimedia.org/wiki/File:Vassily_Kandinsky,_1923_-_On_White_II.jpg',
+      filename: 'Vassily_Kandinsky,_1923_-_On_White_II.jpg',
+    },
+  ]
+
+  const files = await Promise.all(demoImages.map(async ({ filename }) => {
+    const resp = await fetch(`demo/${filename}`)
+    if (!resp.ok) {
+      throw new Error('Network response was not ok')
     }
-    const blob = new Blob([uint8Array], { type: metaData.split(':')[1].split(';')[0] })
-    return new File([blob], f.name, { type: blob.type })
-  })
+    const blob = await resp.blob()
+    const file = new File([blob], filename, { type: blob.type })
+    return file
+  }))
 
   handleFilesAdded(files)
 }
