@@ -3,6 +3,7 @@ import { watchDebounced } from '@vueuse/core'
 interface ImageCollection {
   images: MergeImage[]
   targetDataURL: string | null
+  basename: string
   selected: boolean
 }
 
@@ -69,6 +70,7 @@ export const useMergeStore = defineStore('merge', () => {
 
       return {
         images: group,
+        basename: `Merged image ${index + 1}`,
         targetDataURL: isSameImages ? existingCollection.targetDataURL : null,
         selected: isSameImages ? existingCollection.selected : false,
       }
