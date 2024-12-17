@@ -54,7 +54,7 @@ function downloadImage(dataUrl: string, baseName: string) {
       <UButton
         variant="ghost"
         icon="iconoir:download"
-        @click="downloadImage(src, 'download')"
+        @click="downloadImage(src, title)"
       >
         Download
       </UButton>

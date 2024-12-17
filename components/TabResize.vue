@@ -63,8 +63,7 @@ async function mergeSelectedImages() {
   for (const image of images.value.filter(img => img.selected)) {
     mergeStore.addImage({
       srcDataURL: image.targetDataURL || '',
-      filename: image.filename,
-      srcType: image.srcType,
+      basename: getResizedBasename(image.filename),
       selected: false,
     })
   }
@@ -77,12 +76,16 @@ async function downloadSelectedImages() {
     images.value
       .filter(img => img.selected && img.targetDataURL)
       .map(img => ({
-        basename: img.filename.split('.').slice(0, -1).join('.'),
+        basename: getResizedBasename(img.filename),
         dataURL: img.targetDataURL || '',
       })),
   )
 
   downloadFile(content, 'images.zip')
+}
+
+function getResizedBasename(v: string): string {
+  return `${getBasename(v)}-resized`
 }
 </script>
 
@@ -124,13 +127,17 @@ async function downloadSelectedImages() {
       </template>
 
       <template #srcImg-cell="{ row }">
-        <ImagePreview :src="row.original.srcDataURL" :title="row.original.filename" />
+        <ImagePreview
+          :src="row.original.srcDataURL"
+          :title="getBasename(row.original.filename)"
+        />
       </template>
 
       <template #targetImg-cell="{ row }">
         <ImagePreview
-          v-if="row.original.targetDataURL" :src="row.original.targetDataURL"
-          :title="row.original.filename"
+          v-if="row.original.targetDataURL"
+          :src="row.original.targetDataURL"
+          :title="getResizedBasename(row.original.filename)"
         />
       </template>
 

@@ -46,7 +46,7 @@ async function handleFilesAdded(files: File[]) {
   for (const file of files) {
     const dataURL = await readFileAsDataURL(file)
     mergeStore.addImage(reactive({
-      filename: file.name,
+      basename: getBasename(file.name),
       srcDataURL: dataURL,
       srcType: file.type,
       srcSize: file.size,
@@ -93,7 +93,7 @@ async function handleFilesAdded(files: File[]) {
               <ImagePreview
                 v-if="row.original.images[i]"
                 :src="row.original.images[i].srcDataURL"
-                :title="row.original.images[i].filename"
+                :title="row.original.images[i].basename"
               />
             </div>
           </div>

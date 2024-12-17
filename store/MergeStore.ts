@@ -7,9 +7,8 @@ interface ImageCollection {
 }
 
 interface MergeImage {
-  filename: string
+  basename: string
   srcDataURL: string
-  srcType: string
   selected: boolean
 }
 
