@@ -45,6 +45,15 @@ const activePage = ref('resize')
             },
           ]"
         />
+        <div class="flex items-center justify-end">
+          <UButton
+            icon="iconoir:github"
+            variant="ghost"
+            color="neutral"
+            to="https://github.com/tfabritius/covermaker"
+            target="_blank"
+          />
+        </div>
       </UContainer>
     </header>
 
