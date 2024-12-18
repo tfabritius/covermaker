@@ -136,30 +136,38 @@ async function downloadSelectedImageCollections() {
     </UTable>
   </div>
 
+  <div class="h-20" />
+
   <div
     v-if="allSourceImagesSelected !== false || allImageCollectionsSelected !== false"
-    class="fixed top-auto left-auto bottom-4 right-4 bg-[var(--ui-bg)]
-        border border-[var(--ui-primary)] rounded-[calc(var(--ui-radius)*1.5)]
-        p-2 flex gap-2"
+    class="fixed top-auto left-0 bottom-4 right-0"
   >
-    <UButton
-      v-if="allSourceImagesSelected !== false"
-      icon="iconoir:trash"
-      color="error"
-      variant="subtle"
-      @click="mergeStore.removeSelectedImages"
-    >
-      Remove selected source image(s)
-    </UButton>
+    <UContainer class="flex justify-end">
+      <div
+        class="bg-[var(--ui-bg)]/75 backdrop-blur
+               border border-[var(--ui-primary)] rounded-[calc(var(--ui-radius)*1.5)]
+               p-2 flex gap-2"
+      >
+        <UButton
+          v-if="allSourceImagesSelected !== false"
+          icon="iconoir:trash"
+          color="error"
+          variant="subtle"
+          @click="mergeStore.removeSelectedImages"
+        >
+          Remove selected source image(s)
+        </UButton>
 
-    <UButton
-      v-if="allImageCollectionsSelected !== false"
-      icon="iconoir:download"
-      color="primary"
-      variant="subtle"
-      @click="downloadSelectedImageCollections"
-    >
-      Download selected output images
-    </UButton>
+        <UButton
+          v-if="allImageCollectionsSelected !== false"
+          icon="iconoir:download"
+          color="primary"
+          variant="subtle"
+          @click="downloadSelectedImageCollections"
+        >
+          Download selected output images
+        </UButton>
+      </div>
+    </UContainer>
   </div>
 </template>

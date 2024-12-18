@@ -6,9 +6,7 @@ const activePage = ref('resize')
   <UApp>
     <NuxtRouteAnnouncer />
     <header class="bg-[var(--ui-bg)]/75 backdrop-blur border-b border-[var(--ui-border)] sticky top-0 z-50">
-      <div
-        class="max-w-[var(--ui-container)] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3 h-16"
-      >
+      <UContainer class="flex items-center justify-between gap-3 h-16">
         <span
           class="flex items-center"
         >
@@ -47,7 +45,7 @@ const activePage = ref('resize')
             },
           ]"
         />
-      </div>
+      </UContainer>
     </header>
 
     <UContainer class="my-4">

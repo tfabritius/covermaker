@@ -171,35 +171,41 @@ function getResizedBasename(v: string): string {
 
     <div
       v-if="allImagesSelected !== false"
-      class="fixed top-auto left-auto bottom-4 right-4 bg-[var(--ui-bg)]
-        border border-[var(--ui-primary)] rounded-[calc(var(--ui-radius)*1.5)]
-        p-2 flex gap-2"
+      class="fixed top-auto left-0 bottom-4 right-0"
     >
-      <UButton
-        icon="iconoir:copy"
-        variant="subtle"
-        @click="mergeSelectedImages"
-      >
-        Merge selected image(s)
-      </UButton>
+      <UContainer class="flex justify-end">
+        <div
+          class="bg-[var(--ui-bg)]/75 backdrop-blur
+                 border border-[var(--ui-primary)] rounded-[calc(var(--ui-radius)*1.5)]
+                 p-2 flex gap-2"
+        >
+          <UButton
+            icon="iconoir:copy"
+            variant="subtle"
+            @click="mergeSelectedImages"
+          >
+            Merge selected image(s)
+          </UButton>
 
-      <UButton
-        icon="iconoir:download"
-        variant="subtle"
-        color="neutral"
-        @click="downloadSelectedImages"
-      >
-        Download selected image(s)
-      </UButton>
+          <UButton
+            icon="iconoir:download"
+            variant="subtle"
+            color="neutral"
+            @click="downloadSelectedImages"
+          >
+            Download selected image(s)
+          </UButton>
 
-      <UButton
-        icon="iconoir:trash"
-        variant="subtle"
-        color="error"
-        @click="resizeStore.removeSelectedImages"
-      >
-        Remove selected image(s)
-      </UButton>
+          <UButton
+            icon="iconoir:trash"
+            variant="subtle"
+            color="error"
+            @click="resizeStore.removeSelectedImages"
+          >
+            Remove selected image(s)
+          </UButton>
+        </div>
+      </UContainer>
     </div>
   </div>
 </template>
