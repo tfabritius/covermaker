@@ -2,6 +2,9 @@
   "type": "module",
   "private": true,
   "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": "22"
+  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
