@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@iconify-json/iconoir':
+        specifier: ^1.2.6
+        version: 1.2.6
       '@nuxt/ui':
         specifier: 3.0.0-alpha.10
         version: 3.0.0-alpha.10(@babel/parser@7.26.3)(change-case@5.4.4)(embla-carousel@8.5.1)(ioredis@5.4.1)(magicast@0.3.5)(radix-vue@1.9.11(vue@3.5.13(typescript@5.6.2)))(rollup@4.28.1)(typescript@5.6.2)(vite@5.4.11(@types/node@22.10.2)(lightningcss@1.28.2)(terser@5.37.0))(vue@3.5.13(typescript@5.6.2))
@@ -657,6 +660,9 @@ packages:
   '@humanwhocodes/retry@0.4.1':
     resolution: {integrity: sha512-c7hNEllBlenFTHBky65mhq8WD2kbN9Q6gk0bTk8lSBvc554jpXSkST1iePudpt7+A/AQvuHs9EMqjHDXMY1lrA==}
     engines: {node: '>=18.18'}
+
+  '@iconify-json/iconoir@1.2.6':
+    resolution: {integrity: sha512-vGeMrDy5e4b2Y/UYCz5CSgE/J1L0M58al6O4ar/X593SRZaGUsLzAVdYIulzRV4pCZh3mSsIakiBj6gFtle8dg==}
 
   '@iconify/collections@1.0.493':
     resolution: {integrity: sha512-xK9A6I6v+QbyKAWhhhTxE/4qptAANaBeERew3+yZ4sfMOxuAaGXAdKskNLrJeKe7tBT2yQSYSztPE+AJyG+4ZA==}
@@ -5233,6 +5239,10 @@ snapshots:
   '@humanwhocodes/retry@0.3.1': {}
 
   '@humanwhocodes/retry@0.4.1': {}
+
+  '@iconify-json/iconoir@1.2.6':
+    dependencies:
+      '@iconify/types': 2.0.0
 
   '@iconify/collections@1.0.493':
     dependencies:

@@ -4,6 +4,7 @@ export default defineAppConfig({
       primary: 'sky',
     },
     icons: {
+      check: 'iconoir:check',
       close: 'iconoir:xmark',
       loading: 'iconoir:refresh-double',
     },
