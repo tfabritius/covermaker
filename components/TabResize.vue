@@ -30,7 +30,10 @@ const allImagesSelected = computed<boolean | 'indeterminate'>({
 
 const mergeStore = useMergeStore()
 
+const demoImagesLoading = ref(false)
+
 async function loadDemoImages() {
+  demoImagesLoading.value = true
   const demoImages = [
     {
       sourceURL: 'https://commons.wikimedia.org/wiki/File:Claude_Monet_The_Cliffs_at_Etretat.jpg',
@@ -57,6 +60,7 @@ async function loadDemoImages() {
   }))
 
   handleFilesAdded(files)
+  demoImagesLoading.value = false
 }
 
 async function handleFilesAdded(files: File[]) {
@@ -68,6 +72,7 @@ async function handleFilesAdded(files: File[]) {
       srcType: file.type,
       srcSize: file.size,
       selected: false,
+      loading: false,
     }))
   }
 }
@@ -114,6 +119,7 @@ function getResizedBasename(v: string): string {
         variant="outline"
         color="neutral"
         icon="iconoir:bright-star"
+        :loading="demoImagesLoading"
         @click="loadDemoImages"
       >
         Load demo images
@@ -143,6 +149,7 @@ function getResizedBasename(v: string): string {
         <ImagePreview
           :src="row.original.srcDataURL"
           :title="getBasename(row.original.filename)"
+          :loading="false"
         />
       </template>
 
@@ -151,6 +158,7 @@ function getResizedBasename(v: string): string {
           v-if="row.original.targetDataURL"
           :src="row.original.targetDataURL"
           :title="getResizedBasename(row.original.filename)"
+          :loading="row.original.loading"
         />
       </template>
 

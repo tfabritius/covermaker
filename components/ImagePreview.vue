@@ -1,14 +1,15 @@
 <script setup lang="ts">
 const props = defineProps<{
-  src: string
+  src: string | null
   title: string
+  loading: boolean
 }>()
 
 const image = useTemplateRef('image')
 
-const mimeType = computed(() => props.src.split(';')[0].split(':')[1])
+const mimeType = computed(() => (props.src ?? '').split(';')[0].split(':')[1])
 
-const size = computed(() => formatSize(dataURLToBlob(props.src).size))
+const size = computed(() => formatSize(dataURLToBlob(props.src ?? '').size))
 
 function formatSize(bytes: number): string {
   if (bytes < 1024) {
@@ -30,7 +31,23 @@ function downloadImage(dataUrl: string, baseName: string) {
 </script>
 
 <template>
-  <UModal>
+  <div
+    v-if="loading"
+    name="iconoir:refresh-double"
+    class="size-24 flex items-center justify-center"
+  >
+    <UIcon name="iconoir:refresh-double" class="size-6 text-[var(--ui-primary)] animate-spin" />
+  </div>
+  <div
+    v-else-if="src === null"
+    class="size-24 flex items-center justify-center"
+  >
+    <UIcon
+      name="iconoir:xmark-square"
+      class="size-12 text-[var(--ui-text-muted)]"
+    />
+  </div>
+  <UModal v-else>
     <img
       ref="image"
       :src="src"

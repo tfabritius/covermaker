@@ -5,6 +5,7 @@ export default defineAppConfig({
     },
     icons: {
       close: 'iconoir:xmark',
+      loading: 'iconoir:refresh-double',
     },
     button: {
       slots: {

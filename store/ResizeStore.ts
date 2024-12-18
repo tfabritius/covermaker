@@ -7,6 +7,7 @@ interface ResizeImage {
   srcSize: number
   selected: boolean
   targetDataURL?: string
+  loading: boolean
 }
 
 interface Config {
@@ -53,9 +54,13 @@ export const useResizeStore = defineStore('resize', () => {
   }
 
   async function resizeImage(img: ResizeImage) {
+    img.loading = true
+
     const canvas = await resizeImageToCanvas(img.srcDataURL, config.value.rotate, targetAspectRatio.value, config.value.blur)
     const targetType = config.value.format === 'original' ? img.srcType : config.value.format
     img.targetDataURL = canvas.toDataURL(targetType)
+
+    img.loading = false
   }
 
   async function resizeImageToCanvas(dataURL: string, rotate: 'on' | 'off' | 'auto', targetAspectRatio: number, blur: number): Promise<HTMLCanvasElement> {

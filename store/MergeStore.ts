@@ -5,6 +5,7 @@ interface ImageCollection {
   targetDataURL: string | null
   basename: string
   selected: boolean
+  loading: boolean
 }
 
 interface MergeImage {
@@ -73,6 +74,7 @@ export const useMergeStore = defineStore('merge', () => {
         basename: `Merged image ${index + 1}`,
         targetDataURL: isSameImages ? existingCollection.targetDataURL : null,
         selected: isSameImages ? existingCollection.selected : false,
+        loading: false,
       }
     })
 
@@ -90,6 +92,7 @@ export const useMergeStore = defineStore('merge', () => {
   })
 
   async function mergeImageCollection(ic: ImageCollection) {
+    ic.loading = true
     const imgElements = await Promise.all(ic.images.map(img => loadImage(img.srcDataURL)))
 
     const maxWidth = Math.max(...imgElements.map(img => img.width))
@@ -107,6 +110,7 @@ export const useMergeStore = defineStore('merge', () => {
     }
 
     ic.targetDataURL = canvas.toDataURL()
+    ic.loading = false
   }
 
   return {

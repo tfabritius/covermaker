@@ -107,6 +107,7 @@ async function downloadSelectedImageCollections() {
                 v-if="row.original.images[i]"
                 :src="row.original.images[i].srcDataURL"
                 :title="row.original.images[i].basename"
+                :loading="false"
               />
             </div>
           </div>
@@ -122,9 +123,9 @@ async function downloadSelectedImageCollections() {
         <div class="flex items-center gap-2">
           <UCheckbox v-model="row.original.selected" />
           <ImagePreview
-            v-if="row.original.targetDataURL"
             :src="row.original.targetDataURL"
             :title="row.original.basename"
+            :loading="row.original.loading"
           />
         </div>
       </template>
