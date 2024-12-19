@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const activePage = ref('resize')
+const settingsOpen = ref(false)
 </script>
 
 <template>
@@ -40,8 +41,7 @@ const activePage = ref('resize')
             {
               label: 'Settings',
               icon: 'iconoir:settings',
-              onSelect: () => activePage = 'settings',
-              active: activePage === 'settings',
+              onSelect: () => settingsOpen = !settingsOpen,
             },
           ]"
         />
@@ -57,10 +57,18 @@ const activePage = ref('resize')
       </UContainer>
     </header>
 
+    <USlideover
+      v-model:open="settingsOpen"
+      title="Settings"
+    >
+      <template #body>
+        <AppSettings />
+      </template>
+    </USlideover>
+
     <UContainer class="my-4">
       <TabResize v-if="activePage === 'resize'" @nav-to="page => activePage = page" />
       <TabMerge v-else-if="activePage === 'merge'" />
-      <TabSettings v-else-if="activePage === 'settings'" />
     </UContainer>
   </UApp>
 </template>
