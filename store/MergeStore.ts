@@ -119,7 +119,6 @@ export const useMergeStore = defineStore('merge', () => {
     }
   }, { deep: true, debounce: 500 })
 
-
   return {
     config,
     images,
