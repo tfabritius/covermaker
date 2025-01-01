@@ -109,9 +109,16 @@ export const useMergeStore = defineStore('merge', () => {
       ctx.drawImage(img, x, y, maxWidth, maxHeight)
     }
 
-    ic.targetDataURL = canvas.toDataURL()
+    ic.targetDataURL = canvas.toDataURL(config.value.format)
     ic.loading = false
   }
+
+  watchDebounced(config, () => {
+    for (const ic of imageCollections.value) {
+      mergeImageCollection(ic)
+    }
+  }, { deep: true, debounce: 500 })
+
 
   return {
     config,
