@@ -16,7 +16,7 @@ importers:
         version: 3.0.0-alpha.11(@babel/parser@7.26.5)(change-case@5.4.4)(db0@0.2.1)(embla-carousel@8.5.2)(ioredis@5.4.2)(magicast@0.3.5)(radix-vue@1.9.11(vue@3.5.13(typescript@5.6.2)))(rollup@4.30.1)(typescript@5.6.2)(vite@6.0.7(@types/node@22.10.7)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.37.0)(yaml@2.7.0))(vue@3.5.13(typescript@5.6.2))
       '@pinia/nuxt':
         specifier: 0.9.0
-        version: 0.9.0(magicast@0.3.5)(pinia@2.3.0(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2)))(rollup@4.30.1)
+        version: 0.9.0(magicast@0.3.5)(pinia@2.3.1(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2)))(rollup@4.30.1)
       '@vueuse/core':
         specifier: ^12.4.0
         version: 12.4.0(typescript@5.6.2)
@@ -27,8 +27,8 @@ importers:
         specifier: ^3.15.2
         version: 3.15.2(@parcel/watcher@2.5.0)(@types/node@22.10.7)(db0@0.2.1)(eslint@9.18.0(jiti@2.4.2))(ioredis@5.4.2)(lightningcss@1.29.1)(magicast@0.3.5)(optionator@0.9.4)(rollup@4.30.1)(terser@5.37.0)(typescript@5.6.2)(vite@6.0.7(@types/node@22.10.7)(jiti@2.4.2)(lightningcss@1.29.1)(terser@5.37.0)(yaml@2.7.0))(vue-tsc@2.1.10(typescript@5.6.2))(yaml@2.7.0)
       pinia:
-        specifier: ^2.3.0
-        version: 2.3.0(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2))
+        specifier: ^2.3.1
+        version: 2.3.1(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2))
       tailwindcss:
         specifier: 4.0.0-beta.9
         version: 4.0.0-beta.9
@@ -3640,8 +3640,8 @@ packages:
     resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
     engines: {node: '>=12'}
 
-  pinia@2.3.0:
-    resolution: {integrity: sha512-ohZj3jla0LL0OH5PlLTDMzqKiVw2XARmC1XYLdLWIPBMdhDW/123ZWr4zVAhtJm+aoSkFa13pYXskAvAscIkhQ==}
+  pinia@2.3.1:
+    resolution: {integrity: sha512-khUlZSwt9xXCaTbbxFYBKDc/bWAGWJjOgvxETwkTN7KRm66EeT1ZdZj6i2ceh9sP2Pzqsbc704r2yngBrxBVug==}
     peerDependencies:
       typescript: '>=4.4.4'
       vue: ^2.7.0 || ^3.5.11
@@ -6128,10 +6128,10 @@ snapshots:
       '@parcel/watcher-win32-ia32': 2.5.0
       '@parcel/watcher-win32-x64': 2.5.0
 
-  '@pinia/nuxt@0.9.0(magicast@0.3.5)(pinia@2.3.0(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2)))(rollup@4.30.1)':
+  '@pinia/nuxt@0.9.0(magicast@0.3.5)(pinia@2.3.1(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2)))(rollup@4.30.1)':
     dependencies:
       '@nuxt/kit': 3.14.1592(magicast@0.3.5)(rollup@4.30.1)
-      pinia: 2.3.0(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2))
+      pinia: 2.3.1(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2))
     transitivePeerDependencies:
       - magicast
       - rollup
@@ -9291,7 +9291,7 @@ snapshots:
 
   picomatch@4.0.2: {}
 
-  pinia@2.3.0(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2)):
+  pinia@2.3.1(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2)):
     dependencies:
       '@vue/devtools-api': 6.6.4
       vue: 3.5.13(typescript@5.6.2)
