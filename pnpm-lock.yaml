@@ -30,8 +30,8 @@ importers:
         specifier: ^2.3.1
         version: 2.3.1(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2))
       tailwindcss:
-        specifier: 4.0.0
-        version: 4.0.0
+        specifier: 4.0.3
+        version: 4.0.3
       vue:
         specifier: latest
         version: 3.5.13(typescript@5.6.2)
@@ -1137,6 +1137,9 @@ packages:
   '@tanstack/virtual-core@3.11.2':
     resolution: {integrity: sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==}
 
+  '@tanstack/virtual-core@3.11.3':
+    resolution: {integrity: sha512-v2mrNSnMwnPJtcVqNvV0c5roGCBqeogN8jDtgtuHCphdwBasOZ17x8UV8qpHUh+u0MLfX43c0uUHKje0s+Zb0w==}
+
   '@tanstack/vue-table@8.20.5':
     resolution: {integrity: sha512-2xixT3BEgSDw+jOSqPt6ylO/eutDI107t2WdFMVYIZZ45UmTHLySqNriNs0+dMaKR56K5z3t+97P6VuVnI2L+Q==}
     engines: {node: '>=12'}
@@ -1145,6 +1148,11 @@ packages:
 
   '@tanstack/vue-virtual@3.11.2':
     resolution: {integrity: sha512-y0b1p1FTlzxcSt/ZdGWY1AZ52ddwSU69pvFRYAELUSdLLxV8QOPe9dyT/KATO43UCb3DAwiyzi96h2IoYstBOQ==}
+    peerDependencies:
+      vue: ^2.7.0 || ^3.0.0
+
+  '@tanstack/vue-virtual@3.11.3':
+    resolution: {integrity: sha512-BVZ00i5XBucetRj2doVd32jOPtJthvZSVJvx9GL4gSQsyngliSCtzlP1Op7TFrEtmebRKT8QUQE1tRhOQzWecQ==}
     peerDependencies:
       vue: ^2.7.0 || ^3.0.0
 
@@ -4116,11 +4124,11 @@ packages:
     peerDependencies:
       tailwindcss: '*'
 
-  tailwindcss@4.0.0:
-    resolution: {integrity: sha512-ULRPI3A+e39T7pSaf1xoi58AqqJxVCLg8F/uM5A3FadUbnyDTgltVnXJvdkTjwCOGA6NazqHVcwPJC5h2vRYVQ==}
-
   tailwindcss@4.0.0-beta.9:
     resolution: {integrity: sha512-96KpsfQi+/sFIOfyFnGzyy5pobuzf1iMBD9NVtelerPM/lPI2XUS4Kikw9yuKRniXXw77ov1sl7gCSKLsn6CJA==}
+
+  tailwindcss@4.0.3:
+    resolution: {integrity: sha512-ImmZF0Lon5RrQpsEAKGxRvHwCvMgSC4XVlFRqmbzTEDb/3wvin9zfEZrMwgsa3yqBbPqahYcVI6lulM2S7IZAA==}
 
   tapable@2.2.1:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
@@ -6209,6 +6217,8 @@ snapshots:
 
   '@tanstack/virtual-core@3.11.2': {}
 
+  '@tanstack/virtual-core@3.11.3': {}
+
   '@tanstack/vue-table@8.20.5(vue@3.5.13(typescript@5.6.2))':
     dependencies:
       '@tanstack/table-core': 8.20.5
@@ -6217,6 +6227,11 @@ snapshots:
   '@tanstack/vue-virtual@3.11.2(vue@3.5.13(typescript@5.6.2))':
     dependencies:
       '@tanstack/virtual-core': 3.11.2
+      vue: 3.5.13(typescript@5.6.2)
+
+  '@tanstack/vue-virtual@3.11.3(vue@3.5.13(typescript@5.6.2))':
+    dependencies:
+      '@tanstack/virtual-core': 3.11.3
       vue: 3.5.13(typescript@5.6.2)
 
   '@trysound/sax@0.2.0': {}
@@ -9329,7 +9344,7 @@ snapshots:
       '@floating-ui/vue': 1.1.6(vue@3.5.13(typescript@5.6.2))
       '@internationalized/date': 3.7.0
       '@internationalized/number': 3.6.0
-      '@tanstack/vue-virtual': 3.11.2(vue@3.5.13(typescript@5.6.2))
+      '@tanstack/vue-virtual': 3.11.3(vue@3.5.13(typescript@5.6.2))
       '@vueuse/core': 10.11.1(vue@3.5.13(typescript@5.6.2))
       '@vueuse/shared': 10.11.1(vue@3.5.13(typescript@5.6.2))
       aria-hidden: 1.2.4
@@ -9733,9 +9748,9 @@ snapshots:
       tailwind-merge: 2.6.0
       tailwindcss: 4.0.0-beta.9
 
-  tailwindcss@4.0.0: {}
-
   tailwindcss@4.0.0-beta.9: {}
+
+  tailwindcss@4.0.3: {}
 
   tapable@2.2.1: {}
 
