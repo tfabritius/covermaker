@@ -30,8 +30,8 @@ importers:
         specifier: ^2.3.1
         version: 2.3.1(typescript@5.6.2)(vue@3.5.13(typescript@5.6.2))
       tailwindcss:
-        specifier: 4.0.4
-        version: 4.0.4
+        specifier: 4.0.6
+        version: 4.0.6
       vue:
         specifier: latest
         version: 3.5.13(typescript@5.6.2)
@@ -3175,6 +3175,11 @@ packages:
     engines: {node: ^18 || >=20}
     hasBin: true
 
+  nanoid@5.1.0:
+    resolution: {integrity: sha512-zDAl/llz8Ue/EblwSYwdxGBYfj46IM1dhjVi8dyp9LQffoIGxJEAHj2oeZ4uNcgycSRcQ83CnfcZqEJzVDLcDw==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+
   nanotar@0.2.0:
     resolution: {integrity: sha512-9ca1h0Xjvo9bEkE4UOxgAzLV0jHKe6LMaxo37ND2DAhhAtd0j8pR1Wxz+/goMrZO8AEZTWCmyaOsFI/W5AdpCQ==}
 
@@ -4049,8 +4054,8 @@ packages:
   tailwindcss@4.0.3:
     resolution: {integrity: sha512-ImmZF0Lon5RrQpsEAKGxRvHwCvMgSC4XVlFRqmbzTEDb/3wvin9zfEZrMwgsa3yqBbPqahYcVI6lulM2S7IZAA==}
 
-  tailwindcss@4.0.4:
-    resolution: {integrity: sha512-/ezDLEkOLf1lXkr9F2iI5BHJbexJpty5zkV2B8bGHCqAdbc9vk85Jgdkq+ZOvNkNPa3yAaqJ8DjRt584Bc84kw==}
+  tailwindcss@4.0.6:
+    resolution: {integrity: sha512-mysewHYJKaXgNOW6pp5xon/emCsfAMnO8WMaGKZZ35fomnR/T5gYnRg2/yRTTrtXiEl1tiVkeRt0eMO6HxEZqw==}
 
   tapable@2.2.1:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
@@ -8430,6 +8435,8 @@ snapshots:
 
   nanoid@5.0.9: {}
 
+  nanoid@5.1.0: {}
+
   nanotar@0.2.0: {}
 
   natural-compare@1.4.0: {}
@@ -9102,7 +9109,7 @@ snapshots:
       aria-hidden: 1.2.4
       defu: 6.1.4
       fast-deep-equal: 3.1.3
-      nanoid: 5.0.9
+      nanoid: 5.1.0
       vue: 3.5.13(typescript@5.6.2)
     transitivePeerDependencies:
       - '@vue/composition-api'
@@ -9503,7 +9510,7 @@ snapshots:
 
   tailwindcss@4.0.3: {}
 
-  tailwindcss@4.0.4: {}
+  tailwindcss@4.0.6: {}
 
   tapable@2.2.1: {}
 
