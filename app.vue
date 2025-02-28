@@ -72,8 +72,3 @@ const settingsOpen = ref(false)
     </UContainer>
   </UApp>
 </template>
-
-<style lang="css">
-@import "tailwindcss";
-@import "@nuxt/ui";
-</style>

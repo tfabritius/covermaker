@@ -10,6 +10,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   compatibilityDate: '2024-12-01',
 
+  css: ['~/assets/css/main.css'],
+
   icon: {
     customCollections: [
       {
