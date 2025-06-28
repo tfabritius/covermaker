@@ -23,7 +23,7 @@
     "jszip": "^3.10.1",
     "nuxt": "^3.17.5",
     "pinia": "^3.0.3",
-    "tailwindcss": "4.1.10",
+    "tailwindcss": "4.1.11",
     "vue": "latest",
     "vue-router": "latest"
   },
