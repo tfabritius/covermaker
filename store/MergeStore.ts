@@ -72,8 +72,8 @@ export const useMergeStore = defineStore('merge', () => {
       return {
         images: group,
         basename: `Merged image ${index + 1}`,
-        targetDataURL: isSameImages ? existingCollection.targetDataURL : null,
-        selected: isSameImages ? existingCollection.selected : false,
+        targetDataURL: isSameImages && existingCollection ? existingCollection.targetDataURL : null,
+        selected: isSameImages && existingCollection ? existingCollection.selected : false,
         loading: false,
       }
     })
@@ -104,6 +104,9 @@ export const useMergeStore = defineStore('merge', () => {
 
     for (let i = 0; i < imgElements.length; i++) {
       const img = imgElements[i]
+      if (!img) {
+        continue
+      }
       const x = i % 2 === 0 ? 0 : maxWidth
       const y = i < 2 ? 0 : maxHeight
       ctx.drawImage(img, x, y, maxWidth, maxHeight)

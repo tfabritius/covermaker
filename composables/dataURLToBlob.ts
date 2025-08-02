@@ -1,6 +1,10 @@
 export function dataURLToBlob(dataUrl: string): Blob {
   const arr = dataUrl.split(',')
 
+  if (!arr[1]) {
+    throw new Error('Invalid data URL format')
+  }
+
   // Decode the base64 string and convert to binary string
   const bstr = atob(arr[1])
 
@@ -14,5 +18,5 @@ export function dataURLToBlob(dataUrl: string): Blob {
   }
 
   // Return the Blob
-  return new Blob([u8arr], { type: arr[0].split(':')[1].split(';')[0] })
+  return new Blob([u8arr], { type: arr[0]?.split(':')[1]?.split(';')[0] })
 }

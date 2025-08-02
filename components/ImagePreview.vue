@@ -7,7 +7,7 @@ const props = defineProps<{
 
 const image = useTemplateRef('image')
 
-const mimeType = computed(() => (props.src ?? '').split(';')[0].split(':')[1])
+const mimeType = computed(() => (props.src ?? '').split(';')[0]?.split(':')[1])
 
 const size = computed(() => formatSize(dataURLToBlob(props.src ?? '').size))
 
@@ -24,7 +24,7 @@ function formatSize(bytes: number): string {
 }
 
 function downloadImage(dataUrl: string, baseName: string) {
-  const ext = mimeType.value.split('/')[1]
+  const ext = mimeType.value?.split('/')[1]
   const blob = dataURLToBlob(dataUrl)
   downloadFile(blob, `${baseName}.${ext}`)
 }
