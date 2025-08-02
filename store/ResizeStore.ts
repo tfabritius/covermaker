@@ -31,7 +31,7 @@ export const useResizeStore = defineStore('resize', () => {
     }
 
     const [width, height] = config.value.targetAspectRatio.split(':').map(Number)
-    return width > 0 && height > 0
+    return (width ?? 0) > 0 && (height ?? 0) > 0
   })
 
   const targetAspectRatio = computed(() => {
@@ -39,7 +39,7 @@ export const useResizeStore = defineStore('resize', () => {
       return 1
     }
     const [width, height] = config.value.targetAspectRatio.split(':').map(Number)
-    return width / height
+    return (!!width && !!height) ? width / height : 1
   })
 
   const images = ref<ResizeImage[]>([])

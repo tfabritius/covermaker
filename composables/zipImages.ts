@@ -9,7 +9,7 @@ export async function zipImages(images: { dataURL: string, basename: string }[])
     const imgBlob = dataURLToBlob(dataURL)
 
     // Detect extension from the data URL
-    const ext = dataURL.split(';')[0].split(':')[1].split('/')[1]
+    const ext = dataURL.split(';')[0]?.split(':')[1]?.split('/')[1]
 
     zip.file(`${basename}.${ext}`, imgBlob)
   })
