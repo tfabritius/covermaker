@@ -30,7 +30,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^5.2.0",
     "@nuxt/eslint": "1.8.0",
-    "eslint": "^9.32.0",
+    "eslint": "^9.33.0",
     "typescript": "^5.8.3",
     "vue-tsc": "^3.0.5"
   }
