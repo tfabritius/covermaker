@@ -19,7 +19,7 @@
     "@iconify-json/iconoir": "^1.2.9",
     "@nuxt/ui": "3.3.2",
     "@pinia/nuxt": "0.11.2",
-    "@vueuse/core": "^13.6.0",
+    "@vueuse/core": "^13.7.0",
     "jszip": "^3.10.1",
     "nuxt": "^4.0.3",
     "pinia": "^3.0.3",
