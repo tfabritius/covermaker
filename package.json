@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@iconify-json/iconoir": "^1.2.9",
-    "@nuxt/ui": "4.0.0",
+    "@nuxt/ui": "4.0.1",
     "@pinia/nuxt": "0.11.2",
     "@vueuse/core": "^13.9.0",
     "jszip": "^3.10.1",
