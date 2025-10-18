@@ -17,7 +17,7 @@ jobs:
         uses: pnpm/action-setup@v4.2.0
       # pnpm has to be installed before node to make use of caching
       - name: Install Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version-file: package.json
           cache: pnpm
