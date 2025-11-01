@@ -16,7 +16,7 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@iconify-json/iconoir": "^1.2.9",
+    "@iconify-json/iconoir": "^1.2.10",
     "@nuxt/ui": "4.1.0",
     "@pinia/nuxt": "0.11.2",
     "@vueuse/core": "^14.0.0",

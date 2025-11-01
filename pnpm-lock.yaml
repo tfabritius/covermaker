@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@iconify-json/iconoir':
-        specifier: ^1.2.9
-        version: 1.2.9
+        specifier: ^1.2.10
+        version: 1.2.10
       '@nuxt/ui':
         specifier: 4.1.0
         version: 4.1.0(@babel/parser@7.28.5)(@netlify/blobs@9.1.2)(change-case@5.4.4)(db0@0.3.4)(embla-carousel@8.6.0)(ioredis@5.8.2)(jwt-decode@4.0.0)(magicast@0.3.5)(typescript@5.9.3)(vite@7.1.12(@types/node@24.2.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1))(vue-router@4.6.3(vue@3.5.22(typescript@5.9.3)))(vue@3.5.22(typescript@5.9.3))(zod@3.25.76)
@@ -755,8 +755,8 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@iconify-json/iconoir@1.2.9':
-    resolution: {integrity: sha512-TXcx8mnxuZ0Weq104HwXZFPI0mlJzKjoy4nE20B803+Jrt7g2u4uc2iCGyHKpdqXVws3KaMTMDmY4yExy9Z+Qw==}
+  '@iconify-json/iconoir@1.2.10':
+    resolution: {integrity: sha512-NnbdB9S5G++6wE5aEZhzpFR0HRcaZFSbJJIHOGF2axaNVKnSUs4NBW2z0uhZnM00iUkiK848Sp81EZPg52DL+w==}
 
   '@iconify/collections@1.0.610':
     resolution: {integrity: sha512-HFIv5V09CIb3ZylZbaZhUfGZfoHPwtEcEg8RmTIFABRTTtCI4olYjaVkQuvF1m3hnz+skbdeD0DeGnd+wP0vLg==}
@@ -6361,7 +6361,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@iconify-json/iconoir@1.2.9':
+  '@iconify-json/iconoir@1.2.10':
     dependencies:
       '@iconify/types': 2.0.0
 
