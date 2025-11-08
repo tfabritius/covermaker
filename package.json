@@ -22,7 +22,7 @@
     "@vueuse/core": "^14.0.0",
     "jszip": "^3.10.1",
     "nuxt": "^4.2.0",
-    "pinia": "^3.0.3",
+    "pinia": "^3.0.4",
     "tailwindcss": "4.1.17",
     "vue": "latest",
     "vue-router": "latest"
