@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Install pnpm
         uses: pnpm/action-setup@v4.2.0
       # pnpm has to be installed before node to make use of caching
