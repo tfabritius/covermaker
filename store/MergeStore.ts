@@ -1,4 +1,8 @@
 import { watchDebounced } from '@vueuse/core'
+import { dataURLToPhoton } from '~/composables/imageToPhoton'
+import { photonToDataURL } from '~/composables/photonToCanvas'
+import { photonResize } from '~/composables/photonResize'
+import { photonCreateImage, photonCopyTo } from '~/composables/photonCopy'
 
 interface ImageCollection {
   images: MergeImage[]
@@ -93,26 +97,37 @@ export const useMergeStore = defineStore('merge', () => {
 
   async function mergeImageCollection(ic: ImageCollection) {
     ic.loading = true
-    const imgElements = await Promise.all(ic.images.map(img => loadImage(img.srcDataURL)))
+    
+    // Load all images as Photon images
+    const photonImages = await Promise.all(ic.images.map(img => dataURLToPhoton(img.srcDataURL)))
 
-    const maxWidth = Math.max(...imgElements.map(img => img.width))
-    const maxHeight = Math.max(...imgElements.map(img => img.height))
+    // Find the maximum width and height among all images
+    const maxWidth = Math.max(...photonImages.map(img => img.get_width()))
+    const maxHeight = Math.max(...photonImages.map(img => img.get_height()))
 
-    const { canvas, ctx } = createCanvas()
-    canvas.width = 2 * maxWidth
-    canvas.height = 2 * maxHeight
+    // Create a new blank image with 2x2 grid dimensions
+    const gridImage = await photonCreateImage(2 * maxWidth, 2 * maxHeight)
 
-    for (let i = 0; i < imgElements.length; i++) {
-      const img = imgElements[i]
+    // Resize and copy each image to its position in the grid
+    for (let i = 0; i < photonImages.length; i++) {
+      const img = photonImages[i]
       if (!img) {
         continue
       }
+      
+      // Resize image to fit the grid cell
+      const resizedImg = await photonResize(img, maxWidth, maxHeight, 3)
+      
+      // Calculate position in the grid (2x2)
       const x = i % 2 === 0 ? 0 : maxWidth
       const y = i < 2 ? 0 : maxHeight
-      ctx.drawImage(img, x, y, maxWidth, maxHeight)
+      
+      // Copy the resized image to the grid
+      await photonCopyTo(gridImage, resizedImg, x, y)
     }
 
-    ic.targetDataURL = canvas.toDataURL(config.value.format)
+    // Convert to dataURL for display
+    ic.targetDataURL = await photonToDataURL(gridImage, config.value.format)
     ic.loading = false
   }
 

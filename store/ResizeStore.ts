@@ -1,4 +1,10 @@
 import { watchDebounced } from '@vueuse/core'
+import { dataURLToPhoton } from '~/composables/imageToPhoton'
+import { photonToDataURL } from '~/composables/photonToCanvas'
+import { photonResize } from '~/composables/photonResize'
+import { photonBlur } from '~/composables/photonBlur'
+import { photonRotate90 } from '~/composables/photonRotate'
+import { photonCopyTo } from '~/composables/photonCopy'
 
 interface ResizeImage {
   filename: string
@@ -56,41 +62,52 @@ export const useResizeStore = defineStore('resize', () => {
   async function resizeImage(img: ResizeImage) {
     img.loading = true
 
-    const canvas = await resizeImageToCanvas(img.srcDataURL, config.value.rotate, targetAspectRatio.value, config.value.blur)
     const targetType = config.value.format === 'original' ? img.srcType : config.value.format
-    img.targetDataURL = canvas.toDataURL(targetType)
+    img.targetDataURL = await resizeImageWithPhoton(img.srcDataURL, config.value.rotate, targetAspectRatio.value, config.value.blur, targetType)
 
     img.loading = false
   }
 
-  async function resizeImageToCanvas(dataURL: string, rotate: 'on' | 'off' | 'auto', targetAspectRatio: number, blur: number): Promise<HTMLCanvasElement> {
-    const { canvas, ctx } = createCanvas()
+  async function resizeImageWithPhoton(
+    dataURL: string,
+    rotate: 'on' | 'off' | 'auto',
+    targetAspectRatio: number,
+    blur: number,
+    outputType: string,
+  ): Promise<string> {
+    // Load image as Photon image
+    let photonImg = await dataURLToPhoton(dataURL)
 
-    let img = await loadImage(dataURL)
+    // Get original dimensions
+    let width = photonImg.get_width()
+    let height = photonImg.get_height()
 
     // Rotate the image if required
-    if (rotate === 'on' || (rotate === 'auto' && shouldRotateImage(img.width, img.height, targetAspectRatio))) {
-      img = await rotateImage(img)
+    if (rotate === 'on' || (rotate === 'auto' && shouldRotateImage(width, height, targetAspectRatio))) {
+      photonImg = await photonRotate90(photonImg)
+      // Swap dimensions after rotation
+      ;[width, height] = [height, width]
     }
 
-    const { width, height } = enlargeToAspectRatio(img.height, img.width, targetAspectRatio)
+    // Calculate target dimensions to match aspect ratio
+    const { width: targetWidth, height: targetHeight } = enlargeToAspectRatio(height, width, targetAspectRatio)
 
-    canvas.width = width
-    canvas.height = height
+    // Create a new image with target dimensions, resize original image to fill it, and apply blur
+    const backgroundImg = await photonResize(photonImg, targetWidth, targetHeight, 3)
+    
+    // Apply blur to the background
+    const radius = Math.floor(blur * Math.max(targetWidth, targetHeight) / 100)
+    if (radius > 0) {
+      await photonBlur(backgroundImg, radius)
+    }
 
-    // Draw the image onto the off-screen canvas first
-    ctx.drawImage(img, 0, 0, width, height)
+    // Copy the original (unblurred) image to the center
+    const offsetX = Math.floor((targetWidth - width) / 2)
+    const offsetY = Math.floor((targetHeight - height) / 2)
+    await photonCopyTo(backgroundImg, photonImg, offsetX, offsetY)
 
-    // Apply the blur filter to the image only (without the background)
-    const radius = blur * Math.max(width, height) / 100
-    ctx.filter = `blur(${radius}px)`
-    ctx.drawImage(canvas, 0, 0, width, height)
-
-    // Draw the image again without changing its size and without blurring
-    ctx.filter = 'none'
-    ctx.drawImage(img, (width - img.width) / 2, (height - img.height) / 2)
-
-    return canvas
+    // Convert to dataURL for display
+    return photonToDataURL(backgroundImg, outputType)
   }
 
   function shouldRotateImage(
@@ -126,19 +143,6 @@ export const useResizeStore = defineStore('resize', () => {
       width = Math.round(height * aspectRatio)
     }
     return { width, height }
-  }
-
-  async function rotateImage(img: HTMLImageElement): Promise<HTMLImageElement> {
-    const { canvas, ctx } = createCanvas()
-
-    canvas.width = img.height
-    canvas.height = img.width
-
-    ctx.translate(canvas.width / 2, canvas.height / 2)
-    ctx.rotate(Math.PI / 2)
-    ctx.drawImage(img, -img.width / 2, -img.height / 2)
-
-    return loadImage(canvas.toDataURL())
   }
 
   watchDebounced(config, () => {

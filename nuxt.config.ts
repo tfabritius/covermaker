@@ -10,6 +10,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   compatibilityDate: '2024-12-01',
 
+  vite: {
+    optimizeDeps: {
+      exclude: ['@silvia-odwyer/photon', '@vueuse/core'],
+    },
+  },
+
   css: ['~/assets/css/main.css'],
 
   icon: {
