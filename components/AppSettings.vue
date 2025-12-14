@@ -121,6 +121,48 @@ const { config: mergeConfig } = storeToRefs(mergeStore)
     <h2 class="text-lg font-semibold flex items-center gap-1">
       <UIcon name="iconoir:cell-2x2" /> Merge settings
     </h2>
+
+    <UFormField
+      label="Grid size"
+      description="Number of columns and rows in the merged image grid."
+      hint="columns × rows"
+    >
+      <div class="flex gap-2 items-center w-50">
+        <UInput
+          v-model.number="mergeConfig.gridColumns"
+          type="number"
+          :min="1"
+          :max="10"
+          class="w-20"
+        />
+        <span>×</span>
+        <UInput
+          v-model.number="mergeConfig.gridRows"
+          type="number"
+          :min="1"
+          :max="10"
+          class="w-20"
+        />
+        <UDropdownMenu
+          :items="[
+            { label: '2×1', onSelect: () => { mergeConfig.gridColumns = 2; mergeConfig.gridRows = 1 } },
+            { label: '1×2', onSelect: () => { mergeConfig.gridColumns = 1; mergeConfig.gridRows = 2 } },
+            { label: '2×2', onSelect: () => { mergeConfig.gridColumns = 2; mergeConfig.gridRows = 2 } },
+            { label: '3×2', onSelect: () => { mergeConfig.gridColumns = 3; mergeConfig.gridRows = 2 } },
+            { label: '2×3', onSelect: () => { mergeConfig.gridColumns = 2; mergeConfig.gridRows = 3 } },
+            { label: '3×3', onSelect: () => { mergeConfig.gridColumns = 3; mergeConfig.gridRows = 3 } },
+            { label: '4×4', onSelect: () => { mergeConfig.gridColumns = 4; mergeConfig.gridRows = 4 } },
+          ]"
+        >
+          <UButton
+            icon="iconoir:more-horiz"
+            color="neutral"
+            variant="outline"
+          />
+        </UDropdownMenu>
+      </div>
+    </UFormField>
+
     <UFormField
       label="Target image file format"
     >

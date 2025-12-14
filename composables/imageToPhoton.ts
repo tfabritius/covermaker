@@ -6,6 +6,11 @@ import { loadImage } from './loadImage'
  * Convert an HTMLImageElement to a Photon PhotonImage
  */
 export async function imageToPhoton(img: HTMLImageElement): Promise<photon.PhotonImage> {
+  // Validate the image is loaded
+  if (!img.complete || img.naturalWidth === 0) {
+    throw new Error('Image has not loaded properly')
+  }
+
   const photonLib = await usePhoton()
   
   // Create a temporary canvas to get image data
@@ -28,6 +33,10 @@ export async function imageToPhoton(img: HTMLImageElement): Promise<photon.Photo
  * Convert a data URL to a Photon PhotonImage
  */
 export async function dataURLToPhoton(dataURL: string): Promise<photon.PhotonImage> {
+  if (!dataURL || !dataURL.startsWith('data:')) {
+    throw new Error('Invalid data URL format')
+  }
+  
   const img = await loadImage(dataURL)
   return imageToPhoton(img)
 }

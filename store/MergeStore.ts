@@ -20,11 +20,15 @@ interface MergeImage {
 
 interface Config {
   format: 'image/jpeg' | 'image/png'
+  gridColumns: number
+  gridRows: number
 }
 
 export const useMergeStore = defineStore('merge', () => {
   const config = ref<Config>({
     format: 'image/jpeg',
+    gridColumns: 2,
+    gridRows: 2,
   })
 
   const images = ref<MergeImage[]>([])
@@ -40,7 +44,7 @@ export const useMergeStore = defineStore('merge', () => {
   const imageCollections = ref<ImageCollection[]>([])
 
   function groupItems<T>(items: T[]): T[][] {
-    const chunkSize = 4
+    const chunkSize = config.value.gridColumns * config.value.gridRows
     const chunks: T[][] = []
     for (let i = 0; i < items.length; i += chunkSize) {
       chunks.push(items.slice(i, i + chunkSize))
@@ -49,10 +53,11 @@ export const useMergeStore = defineStore('merge', () => {
   }
 
   const previousGroupedImages = ref<MergeImage[][]>([])
+  const previousGridConfig = ref({ columns: config.value.gridColumns, rows: config.value.gridRows })
 
-  // Watch for changes to the images array and update imageCollection accordingly
-  watchDebounced(images, (newImages) => {
-    const groupedImages = groupItems(newImages)
+  // Function to regroup images and update imageCollections
+  function regroupImages() {
+    const groupedImages = groupItems(images.value)
 
     // Function to check if two groups of images are the same
     const groupedImagesAreEqual = (group1: MergeImage[], group2: MergeImage[]) => {
@@ -65,6 +70,11 @@ export const useMergeStore = defineStore('merge', () => {
       return true
     }
 
+    // Check if grid configuration has changed
+    const gridConfigChanged = 
+      previousGridConfig.value.columns !== config.value.gridColumns || 
+      previousGridConfig.value.rows !== config.value.gridRows
+
     // Rebuild the imageCollection array with updated images
     imageCollections.value = groupedImages.map((group, index) => {
       // Check if a collection already exists at the index
@@ -76,13 +86,20 @@ export const useMergeStore = defineStore('merge', () => {
       return {
         images: group,
         basename: `Merged image ${index + 1}`,
-        targetDataURL: isSameImages && existingCollection ? existingCollection.targetDataURL : null,
+        // If grid config changed, force regeneration by setting targetDataURL to null
+        targetDataURL: (isSameImages && existingCollection && !gridConfigChanged) ? existingCollection.targetDataURL : null,
         selected: isSameImages && existingCollection ? existingCollection.selected : false,
         loading: false,
       }
     })
 
     previousGroupedImages.value = groupedImages
+    previousGridConfig.value = { columns: config.value.gridColumns, rows: config.value.gridRows }
+  }
+
+  // Watch for changes to the images array and update imageCollection accordingly
+  watchDebounced(images, () => {
+    regroupImages()
   }, {
     debounce: 200,
   })
@@ -105,8 +122,11 @@ export const useMergeStore = defineStore('merge', () => {
     const maxWidth = Math.max(...photonImages.map(img => img.get_width()))
     const maxHeight = Math.max(...photonImages.map(img => img.get_height()))
 
-    // Create a new blank image with 2x2 grid dimensions
-    const gridImage = await photonCreateImage(2 * maxWidth, 2 * maxHeight)
+    const gridWidth = maxWidth * config.value.gridColumns
+    const gridHeight = maxHeight * config.value.gridRows
+
+    // Create a new blank image with configurable grid dimensions
+    const gridImage = await photonCreateImage(gridWidth, gridHeight)
 
     // Resize and copy each image to its position in the grid
     for (let i = 0; i < photonImages.length; i++) {
@@ -118,9 +138,11 @@ export const useMergeStore = defineStore('merge', () => {
       // Resize image to fit the grid cell
       const resizedImg = await photonResize(img, maxWidth, maxHeight, 3)
       
-      // Calculate position in the grid (2x2)
-      const x = i % 2 === 0 ? 0 : maxWidth
-      const y = i < 2 ? 0 : maxHeight
+      // Calculate position in the grid dynamically
+      const col = i % config.value.gridColumns
+      const row = Math.floor(i / config.value.gridColumns)
+      const x = col * maxWidth
+      const y = row * maxHeight
       
       // Copy the resized image to the grid
       await photonCopyTo(gridImage, resizedImg, x, y)
@@ -131,11 +153,18 @@ export const useMergeStore = defineStore('merge', () => {
     ic.loading = false
   }
 
-  watchDebounced(config, () => {
+  // Watch for grid configuration changes
+  watchDebounced(() => [config.value.gridColumns, config.value.gridRows], () => {
+    // Force regrouping when grid size changes
+    regroupImages()
+  }, { debounce: 200 })
+
+  // Watch for other config changes (format)
+  watchDebounced(() => config.value.format, () => {
     for (const ic of imageCollections.value) {
       mergeImageCollection(ic)
     }
-  }, { deep: true, debounce: 500 })
+  }, { debounce: 200 })
 
   return {
     config,

@@ -2,7 +2,9 @@
 import { useMergeStore } from '~/store/MergeStore'
 
 const mergeStore = useMergeStore()
-const { images, imageCollections } = storeToRefs(mergeStore)
+const { images, imageCollections, config } = storeToRefs(mergeStore)
+
+const gridSize = computed(() => config.value.gridColumns * config.value.gridRows)
 
 const allSourceImagesSelected = computed<boolean | 'indeterminate'>({
   get: () => {
@@ -93,9 +95,9 @@ async function downloadSelectedImageCollections() {
         </div>
       </template>
       <template #inputImg-cell="{ row }">
-        <div class="flex items-center gap-4">
-          <div
-            v-for="i in [0, 1, 2, 3]"
+        <div class="flex items-center gap-4 flex-wrap">
+          <template
+            v-for="(_, i) in gridSize"
             :key="i"
           >
             <div
@@ -110,7 +112,7 @@ async function downloadSelectedImageCollections() {
                 :loading="false"
               />
             </div>
-          </div>
+          </template>
         </div>
       </template>
       <template #outputImg-header>
