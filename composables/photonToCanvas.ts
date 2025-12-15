@@ -7,20 +7,20 @@ import { usePhoton } from './usePhoton'
  */
 export async function photonToCanvas(photonImage: photon.PhotonImage): Promise<HTMLCanvasElement> {
   const photonLib = await usePhoton()
-  
+
   // Create a canvas element
   const canvas = document.createElement('canvas')
   canvas.width = photonImage.get_width()
   canvas.height = photonImage.get_height()
-  
+
   const ctx = canvas.getContext('2d')
   if (!ctx) {
     throw new Error('Could not get 2D context')
   }
-  
+
   // Put the Photon image data onto the canvas
   photonLib.putImageData(canvas, ctx, photonImage)
-  
+
   return canvas
 }
 

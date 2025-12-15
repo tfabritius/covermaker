@@ -6,21 +6,21 @@ import { usePhoton } from './usePhoton'
  */
 export async function photonCreateImage(width: number, height: number): Promise<photon.PhotonImage> {
   const photonLib = await usePhoton()
-  
+
   // Create a canvas to initialize the PhotonImage
   const canvas = document.createElement('canvas')
   canvas.width = width
   canvas.height = height
-  
+
   const ctx = canvas.getContext('2d')
   if (!ctx) {
     throw new Error('Could not get 2D context')
   }
-  
+
   // Fill with white background
   ctx.fillStyle = 'white'
   ctx.fillRect(0, 0, width, height)
-  
+
   return photonLib.open_image(canvas, ctx)
 }
 
@@ -35,7 +35,7 @@ export async function photonCopyTo(
   y: number,
 ): Promise<void> {
   const photonLib = await usePhoton()
-  
+
   // Use Photon's watermark function to overlay the source image onto the destination
   // Note: watermark expects bigint for x and y coordinates
   photonLib.watermark(destImage, srcImage, BigInt(x), BigInt(y))

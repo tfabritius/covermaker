@@ -10,7 +10,7 @@ export async function photonBlur(
   radius: number,
 ): Promise<void> {
   const photonLib = await usePhoton()
-  
+
   // Photon's gaussian_blur modifies the image in place
   photonLib.gaussian_blur(photonImage, radius)
 }

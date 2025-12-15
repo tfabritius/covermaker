@@ -1,10 +1,10 @@
 import { watchDebounced } from '@vueuse/core'
 import { dataURLToPhoton } from '~/composables/imageToPhoton'
-import { photonToDataURL } from '~/composables/photonToCanvas'
-import { photonResize } from '~/composables/photonResize'
 import { photonBlur } from '~/composables/photonBlur'
-import { photonRotate90 } from '~/composables/photonRotate'
 import { photonCopyTo } from '~/composables/photonCopy'
+import { photonResize } from '~/composables/photonResize'
+import { photonRotate90 } from '~/composables/photonRotate'
+import { photonToDataURL } from '~/composables/photonToCanvas'
 
 interface ResizeImage {
   filename: string
@@ -94,7 +94,7 @@ export const useResizeStore = defineStore('resize', () => {
 
     // Create a new image with target dimensions, resize original image to fill it, and apply blur
     const backgroundImg = await photonResize(photonImg, targetWidth, targetHeight, 3)
-    
+
     // Apply blur to the background
     const radius = Math.floor(blur * Math.max(targetWidth, targetHeight) / 100)
     if (radius > 0) {

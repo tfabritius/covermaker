@@ -1,8 +1,8 @@
 import { watchDebounced } from '@vueuse/core'
 import { dataURLToPhoton } from '~/composables/imageToPhoton'
-import { photonToDataURL } from '~/composables/photonToCanvas'
+import { photonCopyTo, photonCreateImage } from '~/composables/photonCopy'
 import { photonResize } from '~/composables/photonResize'
-import { photonCreateImage, photonCopyTo } from '~/composables/photonCopy'
+import { photonToDataURL } from '~/composables/photonToCanvas'
 
 interface ImageCollection {
   images: MergeImage[]
@@ -71,9 +71,9 @@ export const useMergeStore = defineStore('merge', () => {
     }
 
     // Check if grid configuration has changed
-    const gridConfigChanged = 
-      previousGridConfig.value.columns !== config.value.gridColumns || 
-      previousGridConfig.value.rows !== config.value.gridRows
+    const gridConfigChanged
+      = previousGridConfig.value.columns !== config.value.gridColumns
+        || previousGridConfig.value.rows !== config.value.gridRows
 
     // Rebuild the imageCollection array with updated images
     imageCollections.value = groupedImages.map((group, index) => {
@@ -114,7 +114,7 @@ export const useMergeStore = defineStore('merge', () => {
 
   async function mergeImageCollection(ic: ImageCollection) {
     ic.loading = true
-    
+
     // Load all images as Photon images
     const photonImages = await Promise.all(ic.images.map(img => dataURLToPhoton(img.srcDataURL)))
 
@@ -134,16 +134,16 @@ export const useMergeStore = defineStore('merge', () => {
       if (!img) {
         continue
       }
-      
+
       // Resize image to fit the grid cell
       const resizedImg = await photonResize(img, maxWidth, maxHeight, 3)
-      
+
       // Calculate position in the grid dynamically
       const col = i % config.value.gridColumns
       const row = Math.floor(i / config.value.gridColumns)
       const x = col * maxWidth
       const y = row * maxHeight
-      
+
       // Copy the resized image to the grid
       await photonCopyTo(gridImage, resizedImg, x, y)
     }
