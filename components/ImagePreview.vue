@@ -59,7 +59,7 @@ function downloadImage(dataUrl: string, baseName: string) {
       {{ title }}
     </template>
     <template #description>
-      {{ image?.naturalWidth }} x {{ image?.naturalHeight }} | {{ mimeType }} | {{ size }}
+      {{ image?.naturalWidth }} × {{ image?.naturalHeight }} | {{ mimeType }} | {{ size }}
     </template>
 
     <template #body>
