@@ -20,7 +20,7 @@ interface Config {
   targetAspectRatio: string
   rotate: 'auto' | 'on' | 'off'
   blur: number
-  format: 'original' | 'image/jpeg' | 'image/png'
+  format: 'original' | 'image/jpeg' | 'image/png' | 'image/webp'
 }
 
 export const useResizeStore = defineStore('resize', () => {

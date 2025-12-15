@@ -112,6 +112,7 @@ const { config: mergeConfig } = storeToRefs(mergeStore)
           { label: 'original', value: 'original' },
           { label: 'jpeg', value: 'image/jpeg' },
           { label: 'png', value: 'image/png' },
+          { label: 'webp', value: 'image/webp' },
         ]"
       />
     </UFormField>
@@ -172,6 +173,7 @@ const { config: mergeConfig } = storeToRefs(mergeStore)
         :items="[
           { label: 'jpeg', value: 'image/jpeg' },
           { label: 'png', value: 'image/png' },
+          { label: 'webp', value: 'image/webp' },
         ]"
       />
     </UFormField>

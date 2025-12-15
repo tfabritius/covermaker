@@ -19,7 +19,7 @@ interface MergeImage {
 }
 
 interface Config {
-  format: 'image/jpeg' | 'image/png'
+  format: 'image/jpeg' | 'image/png' | 'image/webp'
   gridColumns: number
   gridRows: number
 }
