@@ -32,6 +32,7 @@ export const useResizeStore = defineStore('resize', () => {
   })
 
   const targetAspectRatioValid = computed(() => {
+    // eslint-disable-next-line e18e/prefer-static-regex
     if (!/^\d+:\d+$/.test(config.value.targetAspectRatio)) {
       return false
     }
