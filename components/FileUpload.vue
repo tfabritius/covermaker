@@ -34,7 +34,7 @@ function onClick() {
 function onFileChange(event: Event) {
   const input = event.target as HTMLInputElement
   if (input.files) {
-    emitFiles(Array.from(input.files))
+    emitFiles([...input.files])
   }
 }
 </script>
