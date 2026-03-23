@@ -33,6 +33,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v7
         with:
+          token: ${{ secrets.PAT }}
           commit-message: 'Bump pnpm from ${{ steps.old.outputs.version }} to ${{ steps.new.outputs.version }}'
           title: 'Bump pnpm from ${{ steps.old.outputs.version }} to ${{ steps.new.outputs.version }}'
           branch: update-pnpm
