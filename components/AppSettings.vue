@@ -42,7 +42,7 @@ const { config: mergeConfig } = storeToRefs(mergeStore)
       description="The aspect ratio to which the image will be enlarged."
       hint="width:height"
     >
-      <UButtonGroup class="w-50">
+      <UFieldGroup class="w-50">
         <UInput
           v-model="resizeConfig.targetAspectRatio"
           class="w-full"
@@ -74,7 +74,7 @@ const { config: mergeConfig } = storeToRefs(mergeStore)
             variant="outline"
           />
         </UDropdownMenu>
-      </UButtonGroup>
+      </UFieldGroup>
     </UFormField>
 
     <UFormField
