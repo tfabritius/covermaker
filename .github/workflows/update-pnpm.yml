@@ -1,0 +1,38 @@
+name: Update pnpm
+
+on:
+  schedule:
+    - cron: '0 9 * * 0' # Weekly on Sunday at 9:00
+  workflow_dispatch:
+
+jobs:
+  update-pnpm:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Get current pnpm version
+        id: old
+        run: echo "version=$(pnpm --version)" >> $GITHUB_OUTPUT
+
+      - name: Update pnpm to latest
+        run: corepack use pnpm@latest
+
+      - name: Get new pnpm version
+        id: new
+        run: echo "version=$(pnpm --version)" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: 'Bump pnpm from ${{ steps.old.outputs.version }} to ${{ steps.new.outputs.version }}'
+          title: 'Bump pnpm from ${{ steps.old.outputs.version }} to ${{ steps.new.outputs.version }}'
+          branch: update-pnpm
+          labels: dependencies
