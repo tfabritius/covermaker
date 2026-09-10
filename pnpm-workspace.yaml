@@ -1,7 +1,8 @@
-shellEmulator: true
+minimumReleaseAgeExcludePrune: true
 
 # eslint-disable-next-line pnpm/yaml-enforce-settings
 trustPolicy: off
+shellEmulator: true
 
 allowBuilds:
   '@parcel/watcher': true
