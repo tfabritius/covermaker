@@ -177,5 +177,12 @@ const { config: mergeConfig } = storeToRefs(mergeStore)
         ]"
       />
     </UFormField>
+
+    <USeparator />
+
+    <div class="flex items-start gap-2 text-sm text-muted">
+      <UIcon name="iconoir:lock" class="mt-0.5 shrink-0" />
+      <span>All image processing happens in your browser. No data is uploaded to any server.</span>
+    </div>
   </div>
 </template>
