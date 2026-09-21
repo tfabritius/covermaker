@@ -1,4 +1,5 @@
 import { watchDebounced } from '@vueuse/core'
+import { enlargeToAspectRatio, shouldRotateImage } from '~/composables/resizeHelpers'
 import { blobToPhoton } from '~/composables/imageToPhoton'
 import { photonBlur } from '~/composables/photonBlur'
 import { photonCopyTo } from '~/composables/photonCopy'
@@ -134,41 +135,6 @@ export const useResizeStore = defineStore('resize', () => {
 
     // Convert to Blob for display/download
     return photonToBlob(backgroundImg, outputType)
-  }
-
-  function shouldRotateImage(
-    width: number,
-    height: number,
-    targetAspectRatio: number,
-  ): boolean {
-  // Calculate the current aspect ratio
-    const currentAspectRatio = width / height
-
-    // Calculate the difference between the current aspect ratio and the target aspect ratio
-    const difference = Math.abs(currentAspectRatio - targetAspectRatio)
-
-    // Calculate the difference if we were to rotate the image (swap width and height)
-    const rotatedAspectRatio = height / width
-    const rotatedDifference = Math.abs(rotatedAspectRatio - targetAspectRatio)
-
-    // If the difference is smaller when rotated, we should rotate the image
-    return rotatedDifference < difference
-  }
-
-  function enlargeToAspectRatio(
-    height: number,
-    width: number,
-    aspectRatio: number,
-  ) {
-    if (width / height > aspectRatio) {
-    // Enlarge the height
-      height = Math.round(width / aspectRatio)
-    }
-    else {
-    // Enlarge the width
-      width = Math.round(height * aspectRatio)
-    }
-    return { width, height }
   }
 
   watchDebounced(config, () => {

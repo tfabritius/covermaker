@@ -1,4 +1,5 @@
 import { watchDebounced } from '@vueuse/core'
+import { groupItems } from '~/composables/groupItems'
 import { blobToPhoton } from '~/composables/imageToPhoton'
 import { photonCopyTo, photonCreateImage } from '~/composables/photonCopy'
 import { photonResize } from '~/composables/photonResize'
@@ -55,21 +56,13 @@ export const useMergeStore = defineStore('merge', () => {
 
   const imageCollections = ref<ImageCollection[]>([])
 
-  function groupItems<T>(items: T[]): T[][] {
-    const chunkSize = config.value.gridColumns * config.value.gridRows
-    const chunks: T[][] = []
-    for (let i = 0; i < items.length; i += chunkSize) {
-      chunks.push(items.slice(i, i + chunkSize))
-    }
-    return chunks
-  }
-
   const previousGroupedImages = ref<MergeImage[][]>([])
   const previousGridConfig = ref({ columns: config.value.gridColumns, rows: config.value.gridRows })
 
   // Function to regroup images and update imageCollections
   function regroupImages() {
-    const groupedImages = groupItems(images.value)
+    const chunkSize = config.value.gridColumns * config.value.gridRows
+    const groupedImages = groupItems(images.value, chunkSize)
 
     // Function to check if two groups of images are the same
     const groupedImagesAreEqual = (group1: MergeImage[], group2: MergeImage[]) => {
