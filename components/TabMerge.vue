@@ -71,73 +71,82 @@ async function downloadSelectedImageCollections() {
 </script>
 
 <template>
-  <FileUpload class="text-center p-5" :data-types="['image/*']" multiple @files-added="handleFilesAdded">
-    <p class="flex justify-center gap-1">
+  <FileUpload class="text-center" :data-types="SUPPORTED_IMAGE_TYPES" multiple @files-added="handleFilesAdded">
+    <p class="flex justify-center gap-1 p-3">
       <UIcon name="iconoir:upload" class="size-5" /> Drag & Drop images here or click to select
     </p>
   </FileUpload>
 
   <div class="my-2" />
 
-  <div class="border border-[var(--ui-border-accented)] rounded-[calc(var(--ui-radius)*1.5)]">
-    <UTable
-      :data="imageCollections"
-      :columns="[
-        { id: 'inputImg' },
-        { id: 'outputImg' },
-      ]"
-    >
-      <template #inputImg-header>
-        <div class="flex gap-2">
-          <UCheckbox v-model="allSourceImagesSelected" />
-          Input images
-        </div>
-      </template>
-      <template #inputImg-cell="{ row }">
-        <div class="flex items-center gap-4 flex-wrap">
-          <template
-            v-for="(_, i) in gridSize"
-            :key="i"
-          >
-            <div
-              v-if="row.original.images[i]"
-              class="flex items-center gap-2"
-            >
-              <UCheckbox v-model="row.original.images[i].selected" />
+  <DropZone :data-types="SUPPORTED_IMAGE_TYPES" multiple @files-added="handleFilesAdded">
+    <template #default="{ isOverDropZone }">
+      <div
+        class="border rounded-[calc(var(--ui-radius)*1.5)] transition-colors"
+        :class="isOverDropZone
+          ? 'border-[var(--ui-primary)] bg-[var(--ui-bg-elevated)]'
+          : 'border-[var(--ui-border-accented)]'"
+      >
+        <UTable
+          :data="imageCollections"
+          :columns="[
+            { id: 'inputImg' },
+            { id: 'outputImg' },
+          ]"
+        >
+          <template #inputImg-header>
+            <div class="flex gap-2">
+              <UCheckbox v-model="allSourceImagesSelected" />
+              Input images
+            </div>
+          </template>
+          <template #inputImg-cell="{ row }">
+            <div class="flex items-center gap-4 flex-wrap">
+              <template
+                v-for="(_, i) in gridSize"
+                :key="i"
+              >
+                <div
+                  v-if="row.original.images[i]"
+                  class="flex items-center gap-2"
+                >
+                  <UCheckbox v-model="row.original.images[i].selected" />
+                  <ImagePreview
+                    v-if="row.original.images[i]"
+                    :blob="row.original.images[i].srcBlob"
+                    :object-url="row.original.images[i].srcUrl"
+                    :title="row.original.images[i].basename"
+                    :loading="false"
+                  />
+                </div>
+              </template>
+            </div>
+          </template>
+          <template #outputImg-header>
+            <div class="flex gap-2">
+              <UCheckbox v-model="allImageCollectionsSelected" />
+              Output images
+            </div>
+          </template>
+          <template #outputImg-cell="{ row }">
+            <div class="flex items-center gap-2">
+              <UCheckbox v-model="row.original.selected" />
               <ImagePreview
-                v-if="row.original.images[i]"
-                :blob="row.original.images[i].srcBlob"
-                :object-url="row.original.images[i].srcUrl"
-                :title="row.original.images[i].basename"
-                :loading="false"
+                :blob="row.original.targetBlob || null"
+                :object-url="row.original.targetUrl"
+                :title="row.original.basename"
+                :loading="row.original.loading"
               />
             </div>
           </template>
-        </div>
-      </template>
-      <template #outputImg-header>
-        <div class="flex gap-2">
-          <UCheckbox v-model="allImageCollectionsSelected" />
-          Output images
-        </div>
-      </template>
-      <template #outputImg-cell="{ row }">
-        <div class="flex items-center gap-2">
-          <UCheckbox v-model="row.original.selected" />
-          <ImagePreview
-            :blob="row.original.targetBlob || null"
-            :object-url="row.original.targetUrl"
-            :title="row.original.basename"
-            :loading="row.original.loading"
-          />
-        </div>
-      </template>
 
-      <template #empty>
-        <UIcon name="iconoir:emoji-sad" class="text-lg" /> <p>No images added yet.</p>
-      </template>
-    </UTable>
-  </div>
+          <template #empty>
+            <UIcon name="iconoir:emoji-sad" class="text-lg" /> <p>No images added yet.</p>
+          </template>
+        </UTable>
+      </div>
+    </template>
+  </DropZone>
 
   <div class="h-20" />
 

@@ -112,8 +112,8 @@ function getResizedBasename(v: string): string {
 <template>
   <div>
     <div class="flex gap-2">
-      <FileUpload class="grow text-center p-5" :data-types="['image/*']" multiple @files-added="handleFilesAdded">
-        <p class="flex justify-center gap-1">
+      <FileUpload class="grow" :data-types="SUPPORTED_IMAGE_TYPES" multiple @files-added="handleFilesAdded">
+        <p class="flex justify-center gap-1 p-3">
           <UIcon name="iconoir:upload" class="size-5" /> Drag & Drop images here or click to select
         </p>
       </FileUpload>
@@ -130,46 +130,57 @@ function getResizedBasename(v: string): string {
 
     <div class="my-2" />
 
-    <UTable
-      class="border border-[var(--ui-border-accented)] rounded-[calc(var(--ui-radius)*1.5)]"
-      :data="images"
-      :columns="[
-        { id: 'select' },
-        { id: 'filename', accessorKey: 'filename', header: 'Filename' },
-        { id: 'srcImg', header: 'Input image' },
-        { id: 'targetImg', header: 'Output image' },
-      ]"
-    >
-      <template #select-header>
-        <UCheckbox v-model="allImagesSelected" />
-      </template>
-      <template #select-cell="{ row }">
-        <UCheckbox v-model="row.original.selected" />
-      </template>
+    <DropZone :data-types="SUPPORTED_IMAGE_TYPES" multiple @files-added="handleFilesAdded">
+      <template #default="{ isOverDropZone }">
+        <div
+          class="border rounded-[calc(var(--ui-radius)*1.5)] transition-colors"
+          :class="isOverDropZone
+            ? 'border-[var(--ui-primary)] bg-[var(--ui-bg-elevated)]'
+            : 'border-[var(--ui-border-accented)]'"
+        >
+        <UTable
+          class="rounded-[calc(var(--ui-radius)*1.5)]"
+          :data="images"
+          :columns="[
+            { id: 'select' },
+            { id: 'filename', accessorKey: 'filename', header: 'Filename' },
+            { id: 'srcImg', header: 'Input image' },
+            { id: 'targetImg', header: 'Output image' },
+          ]"
+        >
+          <template #select-header>
+            <UCheckbox v-model="allImagesSelected" />
+          </template>
+          <template #select-cell="{ row }">
+            <UCheckbox v-model="row.original.selected" />
+          </template>
 
-      <template #srcImg-cell="{ row }">
-        <ImagePreview
-          :blob="row.original.srcBlob"
-          :object-url="row.original.srcUrl"
-          :title="getBasename(row.original.filename)"
-          :loading="false"
-        />
-      </template>
+          <template #srcImg-cell="{ row }">
+            <ImagePreview
+              :blob="row.original.srcBlob"
+              :object-url="row.original.srcUrl"
+              :title="getBasename(row.original.filename)"
+              :loading="false"
+            />
+          </template>
 
-      <template #targetImg-cell="{ row }">
-        <ImagePreview
-          v-if="row.original.targetUrl"
-          :blob="row.original.targetBlob || null"
-          :object-url="row.original.targetUrl"
-          :title="getResizedBasename(row.original.filename)"
-          :loading="row.original.loading"
-        />
-      </template>
+          <template #targetImg-cell="{ row }">
+            <ImagePreview
+              v-if="row.original.targetUrl"
+              :blob="row.original.targetBlob || null"
+              :object-url="row.original.targetUrl"
+              :title="getResizedBasename(row.original.filename)"
+              :loading="row.original.loading"
+            />
+          </template>
 
-      <template #empty>
-        <UIcon name="iconoir:emoji-sad" class="text-lg" /> <p>No images added yet.</p>
+          <template #empty>
+            <UIcon name="iconoir:emoji-sad" class="text-lg" /> <p>No images added yet.</p>
+          </template>
+        </UTable>
+        </div>
       </template>
-    </UTable>
+    </DropZone>
 
     <div class="h-20" />
 
