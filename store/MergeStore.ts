@@ -15,10 +15,10 @@ interface ImageCollection {
 }
 
 interface MergeImage {
+  resizeId: string
   basename: string
   srcBlob: Blob
   srcUrl: string
-  selected: boolean
 }
 
 interface Config {
@@ -36,22 +36,39 @@ export const useMergeStore = defineStore('merge', () => {
 
   const images = ref<MergeImage[]>([])
 
-  function addImage(image: MergeImage) {
-    images.value = [...images.value, image]
+  function syncImage(resizeImg: { id: string, filename: string, blob: Blob, url: string }) {
+    const idx = images.value.findIndex(m => m.resizeId === resizeImg.id)
+    if (idx === -1) {
+      const srcUrl = URL.createObjectURL(resizeImg.blob)
+      images.value = [...images.value, {
+        resizeId: resizeImg.id,
+        basename: getResizedBasename(resizeImg.filename),
+        srcBlob: resizeImg.blob,
+        srcUrl,
+      }]
+    }
+    else if (images.value[idx]!.srcBlob !== resizeImg.blob) {
+      try {
+        URL.revokeObjectURL(images.value[idx]!.srcUrl)
+      }
+      catch {}
+      const srcUrl = URL.createObjectURL(resizeImg.blob)
+      const next = [...images.value]
+      next[idx] = { ...images.value[idx]!, srcBlob: resizeImg.blob, srcUrl }
+      images.value = next
+    }
   }
 
-  function removeSelectedImages() {
-    // Revoke object URLs to avoid memory leaks
+  function unsyncImages(ids: string[]) {
     for (const img of images.value) {
-      if (img.selected) {
+      if (ids.includes(img.resizeId)) {
         try {
-          if (img.srcUrl)
-            URL.revokeObjectURL(img.srcUrl)
+          URL.revokeObjectURL(img.srcUrl)
         }
         catch {}
       }
     }
-    images.value = images.value.filter(img => !img.selected)
+    images.value = images.value.filter(m => !ids.includes(m.resizeId))
   }
 
   const imageCollections = ref<ImageCollection[]>([])
@@ -193,8 +210,8 @@ export const useMergeStore = defineStore('merge', () => {
   return {
     config,
     images,
-    addImage,
-    removeSelectedImages,
+    syncImage,
+    unsyncImages,
     imageCollections,
     mergeImageCollection,
   }

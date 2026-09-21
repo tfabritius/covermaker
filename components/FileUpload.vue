@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const props = defineProps<{
+defineProps<{
   dataTypes?: string[]
   multiple?: boolean
 }>()
@@ -23,7 +23,7 @@ function onFileChange(event: Event) {
 </script>
 
 <template>
-  <DropZone :multiple :dataTypes="dataTypes" @files-added="emit('filesAdded', $event)">
+  <DropZone :multiple :data-types="dataTypes" @files-added="emit('filesAdded', $event)">
     <template #default="{ isOverDropZone }">
       <div
         class="rounded-[calc(var(--ui-radius)*1.5)] font-medium items-center focus:outline-hidden transition-colors text-sm gap-1.5 ring ring-inset text-[var(--ui-text)] bg-[var(--ui-bg)] hover:bg-[var(--ui-bg-elevated)] focus-visible:ring-2 focus-visible:ring-[var(--ui-border-inverted)] p-1.5 cursor-pointer"

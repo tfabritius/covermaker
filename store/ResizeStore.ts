@@ -1,17 +1,20 @@
 import { watchDebounced } from '@vueuse/core'
-import { enlargeToAspectRatio, shouldRotateImage } from '~/composables/resizeHelpers'
 import { blobToPhoton } from '~/composables/imageToPhoton'
 import { photonBlur } from '~/composables/photonBlur'
 import { photonCopyTo } from '~/composables/photonCopy'
 import { photonResize } from '~/composables/photonResize'
 import { photonRotate90 } from '~/composables/photonRotate'
 import { photonToBlob } from '~/composables/photonToCanvas'
+import { enlargeToAspectRatio, shouldRotateImage } from '~/composables/resizeHelpers'
+import { useMergeStore } from '~/store/MergeStore'
 
 interface ResizeImage {
+  id: string
   filename: string
   srcBlob: Blob
   srcUrl: string
   selected: boolean
+  resize: boolean
   targetBlob?: Blob
   targetUrl?: string
   loading: boolean
@@ -52,12 +55,16 @@ export const useResizeStore = defineStore('resize', () => {
   const images = ref<ResizeImage[]>([])
 
   function addImage(image: ResizeImage) {
+    image.id = crypto.randomUUID()
     images.value = [...images.value, image]
     resizeImage(image)
   }
 
   function removeSelectedImages() {
-    // Revoke object URLs to avoid memory leaks
+    const selectedIds = images.value.filter(img => img.selected).map(img => img.id)
+    const mergeStore = useMergeStore()
+    mergeStore.unsyncImages(selectedIds)
+
     for (const img of images.value) {
       if (img.selected) {
         try {
@@ -70,6 +77,17 @@ export const useResizeStore = defineStore('resize', () => {
       }
     }
     images.value = images.value.filter(img => !img.selected)
+  }
+
+  function setImageResize(img: ResizeImage, value: boolean) {
+    img.resize = value
+    if (value) {
+      resizeImage(img)
+    }
+    else {
+      const mergeStore = useMergeStore()
+      mergeStore.syncImage({ id: img.id, filename: img.filename, blob: img.srcBlob, url: img.srcUrl })
+    }
   }
 
   async function resizeImage(img: ResizeImage) {
@@ -93,6 +111,9 @@ export const useResizeStore = defineStore('resize', () => {
     img.targetUrl = URL.createObjectURL(outBlob)
 
     img.loading = false
+
+    const mergeStore = useMergeStore()
+    mergeStore.syncImage({ id: img.id, filename: img.filename, blob: img.targetBlob, url: img.targetUrl })
   }
 
   async function resizeImageWithPhoton(
@@ -139,7 +160,9 @@ export const useResizeStore = defineStore('resize', () => {
 
   watchDebounced(config, () => {
     for (const image of images.value) {
-      resizeImage(image)
+      if (image.resize) {
+        resizeImage(image)
+      }
     }
   }, { deep: true, debounce: 500 })
 
@@ -148,6 +171,7 @@ export const useResizeStore = defineStore('resize', () => {
     images,
     addImage,
     removeSelectedImages,
+    setImageResize,
     targetAspectRatioValid,
     resizeImage,
   }

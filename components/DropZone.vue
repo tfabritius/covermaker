@@ -12,7 +12,10 @@ const emit = defineEmits<{
 
 const zoneRef = useTemplateRef('zoneRef')
 const { isOverDropZone } = useDropZone(zoneRef, {
-  onDrop: (files) => { if (files) emit('filesAdded', files) },
+  onDrop: (files) => {
+    if (files)
+      emit('filesAdded', files)
+  },
   ...(props.dataTypes !== undefined ? { dataTypes: props.dataTypes } : {}),
   multiple: props.multiple,
 })
