@@ -18,5 +18,5 @@ export function dataURLToBlob(dataUrl: string): Blob {
   }
 
   // Return the Blob
-  return new Blob([u8arr], { type: arr[0]?.split(':')[1]?.split(';')[0] })
+  return new Blob([u8arr], { type: arr[0]?.split(':')[1]?.split(';')[0] ?? '' })
 }
