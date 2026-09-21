@@ -1,12 +1,13 @@
 import { watchDebounced } from '@vueuse/core'
-import { dataURLToPhoton } from '~/composables/imageToPhoton'
+import { blobToPhoton } from '~/composables/imageToPhoton'
 import { photonCopyTo, photonCreateImage } from '~/composables/photonCopy'
 import { photonResize } from '~/composables/photonResize'
-import { photonToDataURL } from '~/composables/photonToCanvas'
+import { photonToBlob } from '~/composables/photonToCanvas'
 
 interface ImageCollection {
   images: MergeImage[]
-  targetDataURL: string | null
+  targetBlob: Blob | null
+  targetUrl: string | null
   basename: string
   selected: boolean
   loading: boolean
@@ -14,7 +15,8 @@ interface ImageCollection {
 
 interface MergeImage {
   basename: string
-  srcDataURL: string
+  srcBlob: Blob
+  srcUrl: string
   selected: boolean
 }
 
@@ -38,6 +40,16 @@ export const useMergeStore = defineStore('merge', () => {
   }
 
   function removeSelectedImages() {
+    // Revoke object URLs to avoid memory leaks
+    for (const img of images.value) {
+      if (img.selected) {
+        try {
+          if (img.srcUrl)
+            URL.revokeObjectURL(img.srcUrl)
+        }
+        catch {}
+      }
+    }
     images.value = images.value.filter(img => !img.selected)
   }
 
@@ -75,6 +87,16 @@ export const useMergeStore = defineStore('merge', () => {
       = previousGridConfig.value.columns !== config.value.gridColumns
         || previousGridConfig.value.rows !== config.value.gridRows
 
+    // Revoke targetUrls that won't be carried forward (changed images, grid config change, or dropped collections)
+    imageCollections.value.forEach((existing, i) => {
+      if (!existing.targetUrl)
+        return
+      const isSame = previousGroupedImages.value[i]
+        && groupedImagesAreEqual(previousGroupedImages.value[i], groupedImages[i] ?? [])
+      if (!isSame || gridConfigChanged || i >= groupedImages.length)
+        URL.revokeObjectURL(existing.targetUrl)
+    })
+
     // Rebuild the imageCollection array with updated images
     imageCollections.value = groupedImages.map((group, index) => {
       // Check if a collection already exists at the index
@@ -86,8 +108,9 @@ export const useMergeStore = defineStore('merge', () => {
       return {
         images: group,
         basename: `Merged image ${index + 1}`,
-        // If grid config changed, force regeneration by setting targetDataURL to null
-        targetDataURL: (isSameImages && existingCollection && !gridConfigChanged) ? existingCollection.targetDataURL : null,
+        // If grid config changed, force regeneration by setting targetBlob to null
+        targetBlob: (isSameImages && existingCollection && !gridConfigChanged) ? existingCollection.targetBlob : null,
+        targetUrl: (isSameImages && existingCollection && !gridConfigChanged) ? existingCollection.targetUrl : null,
         selected: isSameImages && existingCollection ? existingCollection.selected : false,
         loading: false,
       }
@@ -106,7 +129,7 @@ export const useMergeStore = defineStore('merge', () => {
 
   watchDebounced(imageCollections, (newImageCollections) => {
     newImageCollections
-      .filter(ic => ic.targetDataURL === null)
+      .filter(ic => ic.targetBlob === null)
       .forEach(ic => mergeImageCollection(ic))
   }, {
     debounce: 200,
@@ -116,7 +139,7 @@ export const useMergeStore = defineStore('merge', () => {
     ic.loading = true
 
     // Load all images as Photon images
-    const photonImages = await Promise.all(ic.images.map(img => dataURLToPhoton(img.srcDataURL)))
+    const photonImages = await Promise.all(ic.images.map(img => blobToPhoton(img.srcBlob)))
 
     // Find the maximum width and height among all images
     const maxWidth = Math.max(...photonImages.map(img => img.get_width()))
@@ -148,8 +171,16 @@ export const useMergeStore = defineStore('merge', () => {
       await photonCopyTo(gridImage, resizedImg, x, y)
     }
 
-    // Convert to dataURL for display
-    ic.targetDataURL = await photonToDataURL(gridImage, config.value.format)
+    // Convert to Blob for display
+    const outBlob = await photonToBlob(gridImage, config.value.format)
+    ic.targetBlob = outBlob
+    try {
+      if (ic.targetUrl)
+        URL.revokeObjectURL(ic.targetUrl)
+    }
+    catch {}
+    ic.targetUrl = URL.createObjectURL(outBlob)
+
     ic.loading = false
   }
 

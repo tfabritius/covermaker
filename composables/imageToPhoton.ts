@@ -40,3 +40,17 @@ export async function dataURLToPhoton(dataURL: string): Promise<photon.PhotonIma
   const img = await loadImage(dataURL)
   return imageToPhoton(img)
 }
+
+/**
+ * Convert a Blob to a Photon PhotonImage (preferred)
+ */
+export async function blobToPhoton(blob: Blob): Promise<photon.PhotonImage> {
+  const url = URL.createObjectURL(blob)
+  try {
+    const img = await loadImage(url)
+    return imageToPhoton(img)
+  }
+  finally {
+    URL.revokeObjectURL(url)
+  }
+}

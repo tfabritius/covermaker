@@ -46,12 +46,11 @@ const allImageCollectionsSelected = computed<boolean | 'indeterminate'>({
 
 async function handleFilesAdded(files: File[]) {
   for (const file of files) {
-    const dataURL = await readFileAsDataURL(file)
+    const srcUrl = URL.createObjectURL(file)
     mergeStore.addImage(reactive({
       basename: getBasename(file.name),
-      srcDataURL: dataURL,
-      srcType: file.type,
-      srcSize: file.size,
+      srcBlob: file,
+      srcUrl,
       selected: false,
     }))
   }
@@ -60,10 +59,10 @@ async function handleFilesAdded(files: File[]) {
 async function downloadSelectedImageCollections() {
   const content = await zipImages(
     imageCollections.value
-      .filter(ic => ic.selected && ic.targetDataURL)
+      .filter(ic => ic.selected && ic.targetBlob)
       .map(ic => ({
         basename: ic.basename,
-        dataURL: ic.targetDataURL || '',
+        blob: ic.targetBlob as Blob,
       })),
   )
 
@@ -107,7 +106,8 @@ async function downloadSelectedImageCollections() {
               <UCheckbox v-model="row.original.images[i].selected" />
               <ImagePreview
                 v-if="row.original.images[i]"
-                :src="row.original.images[i].srcDataURL"
+                :blob="row.original.images[i].srcBlob"
+                :object-url="row.original.images[i].srcUrl"
                 :title="row.original.images[i].basename"
                 :loading="false"
               />
@@ -125,7 +125,8 @@ async function downloadSelectedImageCollections() {
         <div class="flex items-center gap-2">
           <UCheckbox v-model="row.original.selected" />
           <ImagePreview
-            :src="row.original.targetDataURL"
+            :blob="row.original.targetBlob || null"
+            :object-url="row.original.targetUrl"
             :title="row.original.basename"
             :loading="row.original.loading"
           />

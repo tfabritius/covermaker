@@ -1,18 +1,18 @@
 import { watchDebounced } from '@vueuse/core'
-import { dataURLToPhoton } from '~/composables/imageToPhoton'
+import { blobToPhoton } from '~/composables/imageToPhoton'
 import { photonBlur } from '~/composables/photonBlur'
 import { photonCopyTo } from '~/composables/photonCopy'
 import { photonResize } from '~/composables/photonResize'
 import { photonRotate90 } from '~/composables/photonRotate'
-import { photonToDataURL } from '~/composables/photonToCanvas'
+import { photonToBlob } from '~/composables/photonToCanvas'
 
 interface ResizeImage {
   filename: string
-  srcDataURL: string
-  srcType: string
-  srcSize: number
+  srcBlob: Blob
+  srcUrl: string
   selected: boolean
-  targetDataURL?: string
+  targetBlob?: Blob
+  targetUrl?: string
   loading: boolean
 }
 
@@ -56,27 +56,53 @@ export const useResizeStore = defineStore('resize', () => {
   }
 
   function removeSelectedImages() {
+    // Revoke object URLs to avoid memory leaks
+    for (const img of images.value) {
+      if (img.selected) {
+        try {
+          if (img.srcUrl)
+            URL.revokeObjectURL(img.srcUrl)
+          if (img.targetUrl)
+            URL.revokeObjectURL(img.targetUrl)
+        }
+        catch {}
+      }
+    }
     images.value = images.value.filter(img => !img.selected)
   }
 
   async function resizeImage(img: ResizeImage) {
     img.loading = true
 
-    const targetType = config.value.format === 'original' ? img.srcType : config.value.format
-    img.targetDataURL = await resizeImageWithPhoton(img.srcDataURL, config.value.rotate, targetAspectRatio.value, config.value.blur, targetType)
+    const targetType = config.value.format === 'original' ? img.srcBlob.type : config.value.format
+    const outBlob = await resizeImageWithPhoton(
+      img.srcBlob,
+      config.value.rotate,
+      targetAspectRatio.value,
+      config.value.blur,
+      targetType,
+    )
+
+    img.targetBlob = outBlob
+    try {
+      if (img.targetUrl)
+        URL.revokeObjectURL(img.targetUrl)
+    }
+    catch {}
+    img.targetUrl = URL.createObjectURL(outBlob)
 
     img.loading = false
   }
 
   async function resizeImageWithPhoton(
-    dataURL: string,
+    srcBlob: Blob,
     rotate: 'on' | 'off' | 'auto',
     targetAspectRatio: number,
     blur: number,
     outputType: string,
-  ): Promise<string> {
+  ): Promise<Blob> {
     // Load image as Photon image
-    let photonImg = await dataURLToPhoton(dataURL)
+    let photonImg = await blobToPhoton(srcBlob)
 
     // Get original dimensions
     let width = photonImg.get_width()
@@ -106,8 +132,8 @@ export const useResizeStore = defineStore('resize', () => {
     const offsetY = Math.floor((targetHeight - height) / 2)
     await photonCopyTo(backgroundImg, photonImg, offsetX, offsetY)
 
-    // Convert to dataURL for display
-    return photonToDataURL(backgroundImg, outputType)
+    // Convert to Blob for display/download
+    return photonToBlob(backgroundImg, outputType)
   }
 
   function shouldRotateImage(

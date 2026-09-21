@@ -1,15 +1,16 @@
 <script setup lang="ts">
 const props = defineProps<{
-  src: string | null
+  blob: Blob | null
+  objectUrl: string | null
   title: string
   loading: boolean
 }>()
 
 const image = useTemplateRef('image')
 
-const mimeType = computed(() => (props.src ?? '').split(';')[0]?.split(':')[1])
+const mimeType = computed(() => props.blob?.type || 'application/octet-stream')
 
-const size = computed(() => formatSize(dataURLToBlob(props.src ?? '').size))
+const size = computed(() => formatSize(props.blob ? props.blob.size : 0))
 
 function formatSize(bytes: number): string {
   if (bytes < 1024) {
@@ -23,10 +24,11 @@ function formatSize(bytes: number): string {
   }
 }
 
-function downloadImage(dataUrl: string, baseName: string) {
-  const ext = mimeType.value?.split('/')[1]
-  const blob = dataURLToBlob(dataUrl)
-  downloadFile(blob, `${baseName}.${ext}`)
+function download() {
+  if (!props.blob)
+    return
+  const ext = mimeType.value.split('/')[1] || 'bin'
+  downloadFile(props.blob, `${props.title}.${ext}`)
 }
 </script>
 
@@ -39,7 +41,7 @@ function downloadImage(dataUrl: string, baseName: string) {
     <UIcon name="iconoir:refresh-double" class="size-6 text-[var(--ui-primary)] animate-spin" />
   </div>
   <div
-    v-else-if="src === null"
+    v-else-if="!objectUrl"
     class="size-24 flex items-center justify-center"
   >
     <UIcon
@@ -50,7 +52,7 @@ function downloadImage(dataUrl: string, baseName: string) {
   <UModal v-else>
     <img
       ref="image"
-      :src="src"
+      :src="objectUrl"
       class="cursor-pointer"
       width="100"
       height="100"
@@ -64,14 +66,15 @@ function downloadImage(dataUrl: string, baseName: string) {
 
     <template #body>
       <img
-        :src="src"
+        :src="objectUrl"
       >
     </template>
     <template #footer>
       <UButton
         variant="ghost"
         icon="iconoir:download"
-        @click="downloadImage(src, title)"
+        :disabled="!blob"
+        @click="download()"
       >
         Download
       </UButton>

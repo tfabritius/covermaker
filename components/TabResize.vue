@@ -65,12 +65,11 @@ async function loadDemoImages() {
 
 async function handleFilesAdded(files: File[]) {
   for (const file of files) {
-    const dataURL = await readFileAsDataURL(file)
+    const srcUrl = URL.createObjectURL(file)
     resizeStore.addImage(reactive({
       filename: file.name,
-      srcDataURL: dataURL,
-      srcType: file.type,
-      srcSize: file.size,
+      srcBlob: file,
+      srcUrl,
       selected: false,
       loading: false,
     }))
@@ -79,8 +78,11 @@ async function handleFilesAdded(files: File[]) {
 
 async function mergeSelectedImages() {
   for (const image of images.value.filter(img => img.selected)) {
+    if (!image.targetBlob || !image.targetUrl)
+      continue
     mergeStore.addImage({
-      srcDataURL: image.targetDataURL || '',
+      srcBlob: image.targetBlob,
+      srcUrl: image.targetUrl,
       basename: getResizedBasename(image.filename),
       selected: false,
     })
@@ -92,10 +94,10 @@ async function mergeSelectedImages() {
 async function downloadSelectedImages() {
   const content = await zipImages(
     images.value
-      .filter(img => img.selected && img.targetDataURL)
+      .filter(img => img.selected && img.targetBlob)
       .map(img => ({
         basename: getResizedBasename(img.filename),
-        dataURL: img.targetDataURL || '',
+        blob: img.targetBlob as Blob,
       })),
   )
 
@@ -147,7 +149,8 @@ function getResizedBasename(v: string): string {
 
       <template #srcImg-cell="{ row }">
         <ImagePreview
-          :src="row.original.srcDataURL"
+          :blob="row.original.srcBlob"
+          :object-url="row.original.srcUrl"
           :title="getBasename(row.original.filename)"
           :loading="false"
         />
@@ -155,8 +158,9 @@ function getResizedBasename(v: string): string {
 
       <template #targetImg-cell="{ row }">
         <ImagePreview
-          v-if="row.original.targetDataURL"
-          :src="row.original.targetDataURL"
+          v-if="row.original.targetUrl"
+          :blob="row.original.targetBlob || null"
+          :object-url="row.original.targetUrl"
           :title="getResizedBasename(row.original.filename)"
           :loading="row.original.loading"
         />

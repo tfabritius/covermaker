@@ -31,3 +31,27 @@ export async function photonToDataURL(photonImage: photon.PhotonImage, type: str
   const canvas = await photonToCanvas(photonImage)
   return canvas.toDataURL(type)
 }
+
+/**
+ * Convert a Photon PhotonImage to a Blob
+ */
+export async function photonToBlob(
+  photonImage: photon.PhotonImage,
+  type: string = 'image/png',
+  quality?: number,
+): Promise<Blob> {
+  const canvas = await photonToCanvas(photonImage)
+  return await new Promise<Blob>((resolve, reject) => {
+    try {
+      canvas.toBlob((blob) => {
+        if (blob)
+          resolve(blob)
+        else reject(new Error('Canvas toBlob returned null'))
+      }, type, quality)
+    }
+    catch (e) {
+      const err = e instanceof Error ? e : new Error(String(e))
+      reject(err)
+    }
+  })
+}
