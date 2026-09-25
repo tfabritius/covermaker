@@ -48,8 +48,8 @@ async function downloadSelectedImageCollections() {
 <template>
   <div v-if="imageCollections.length > 0" data-testid="section-merge">
     <div class="flex items-center justify-between mb-3">
-      <h2 class="text-lg font-semibold text-[var(--ui-text-highlighted)]">
-        <span class="text-[var(--ui-primary)]">2.</span> Merge images
+      <h2 class="text-lg font-semibold text-highlighted">
+        <span class="text-primary">2.</span> Merge images
       </h2>
       <UDropdownMenu
         :items="selectionMenuItems"
@@ -63,7 +63,7 @@ async function downloadSelectedImageCollections() {
 
     <div class="flex items-center gap-2 mb-3">
       <UCheckbox v-model="allImageCollectionsSelected" />
-      <span class="text-sm text-[var(--ui-text-muted)]">Select all</span>
+      <span class="text-sm text-muted">Select all</span>
     </div>
 
     <div class="flex flex-wrap gap-4">
@@ -72,7 +72,7 @@ async function downloadSelectedImageCollections() {
         :key="i"
         data-testid="merge-collection-card"
         class="cursor-pointer"
-        :class="ic.selected ? 'ring-2 ring-[var(--ui-primary)]' : ''"
+        :class="ic.selected ? 'ring-2 ring-primary' : ''"
         @click="ic.selected = !ic.selected"
       >
         <template #header>

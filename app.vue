@@ -5,16 +5,16 @@ const settingsOpen = ref(false)
 <template>
   <UApp>
     <NuxtRouteAnnouncer />
-    <header class="bg-[var(--ui-bg)]/75 backdrop-blur border-b border-[var(--ui-border)] sticky top-0 z-50">
+    <header class="bg-(--ui-bg)/75 backdrop-blur border-b border-default sticky top-0 z-50">
       <UContainer class="flex items-center justify-between gap-3 h-16">
         <span class="flex items-center">
-          <UIcon name="covermkr:logo" class="size-6 text-[var(--ui-primary)]" />
-          <span class="text-xl font-bold text-[var(--ui-text-highlighted)]">
-            <span class="text-[var(--ui-primary)]">Cover</span>
+          <UIcon name="covermkr:logo" class="size-6 text-primary" />
+          <span class="text-xl font-bold text-highlighted">
+            <span class="text-primary">Cover</span>
             <span>M</span>
-            <span class="text-[var(--ui-text-highlighted)]/40">a</span>
+            <span class="text-(--ui-text-highlighted)/40">a</span>
             <span>k</span>
-            <span class="text-[var(--ui-text-highlighted)]/40">e</span>
+            <span class="text-(--ui-text-highlighted)/40">e</span>
             <span>r</span>
           </span>
         </span>

@@ -38,7 +38,7 @@ function download() {
     name="iconoir:refresh-double"
     class="size-24 flex items-center justify-center"
   >
-    <UIcon name="iconoir:refresh-double" class="size-6 text-[var(--ui-primary)] animate-spin" />
+    <UIcon name="iconoir:refresh-double" class="size-6 text-primary animate-spin" />
   </div>
   <div
     v-else-if="!objectUrl"
@@ -46,7 +46,7 @@ function download() {
   >
     <UIcon
       name="iconoir:xmark-square"
-      class="size-12 text-[var(--ui-text-muted)]"
+      class="size-12 text-muted"
     />
   </div>
   <UModal v-else>

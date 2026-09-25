@@ -103,8 +103,8 @@ async function handleFilesAdded(files: File[]) {
     <div class="my-2" />
 
     <div class="flex items-center justify-between mb-2">
-      <h2 class="text-lg font-semibold text-[var(--ui-text-highlighted)]">
-        <span class="text-[var(--ui-primary)]">1.</span> Resize to aspect ratio
+      <h2 class="text-lg font-semibold text-highlighted">
+        <span class="text-primary">1.</span> Resize to aspect ratio
       </h2>
       <UDropdownMenu
         :items="selectionMenuItems"
@@ -121,8 +121,8 @@ async function handleFilesAdded(files: File[]) {
         <div
           class="border rounded-[calc(var(--ui-radius)*1.5)] transition-colors"
           :class="isOverDropZone
-            ? 'border-[var(--ui-primary)] bg-[var(--ui-bg-elevated)]'
-            : 'border-[var(--ui-border-accented)]'"
+            ? 'border-primary bg-elevated'
+            : 'border-accented'"
         >
           <UTable
             class="rounded-[calc(var(--ui-radius)*1.5)]"
