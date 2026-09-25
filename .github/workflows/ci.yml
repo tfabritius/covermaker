@@ -27,6 +27,8 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm generate
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4.1.0
         if: ${{ github.ref == 'refs/heads/main' }}

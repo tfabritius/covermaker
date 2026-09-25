@@ -46,7 +46,7 @@ async function downloadSelectedImageCollections() {
 </script>
 
 <template>
-  <div v-if="imageCollections.length > 0">
+  <div v-if="imageCollections.length > 0" data-testid="section-merge">
     <div class="flex items-center justify-between mb-3">
       <h2 class="text-lg font-semibold text-[var(--ui-text-highlighted)]">
         <span class="text-[var(--ui-primary)]">2.</span> Merge images
@@ -70,6 +70,7 @@ async function downloadSelectedImageCollections() {
       <UCard
         v-for="(ic, i) in imageCollections"
         :key="i"
+        data-testid="merge-collection-card"
         class="cursor-pointer"
         :class="ic.selected ? 'ring-2 ring-[var(--ui-primary)]' : ''"
         @click="ic.selected = !ic.selected"
