@@ -52,8 +52,8 @@ async function downloadSelectedImageCollections() {
         <span class="text-primary">2.</span> Merge images
       </h2>
       <UDropdownMenu
+        v-if="selectedCount > 0"
         :items="selectionMenuItems"
-        :class="selectedCount === 0 ? 'invisible pointer-events-none' : ''"
       >
         <UButton variant="subtle" color="neutral" size="sm" trailing-icon="iconoir:nav-arrow-down">
           {{ selectedCount }} selected
@@ -62,7 +62,7 @@ async function downloadSelectedImageCollections() {
     </div>
 
     <div class="flex items-center gap-2 mb-3">
-      <UCheckbox v-model="allImageCollectionsSelected" />
+      <UCheckbox v-model="allImageCollectionsSelected" aria-label="Select all merged images" />
       <span class="text-sm text-muted">Select all</span>
     </div>
 
@@ -73,11 +73,17 @@ async function downloadSelectedImageCollections() {
         data-testid="merge-collection-card"
         class="cursor-pointer"
         :class="ic.selected ? 'ring-2 ring-primary' : ''"
+        role="checkbox"
+        :aria-checked="ic.selected"
+        :aria-label="ic.basename"
+        tabindex="0"
         @click="ic.selected = !ic.selected"
+        @keydown.enter.prevent="ic.selected = !ic.selected"
+        @keydown.space.prevent="ic.selected = !ic.selected"
       >
         <template #header>
           <div class="flex items-center gap-2">
-            <UCheckbox :model-value="ic.selected" @click.stop @update:model-value="ic.selected = !!$event" />
+            <UCheckbox :model-value="ic.selected" aria-hidden="true" tabindex="-1" @click.stop @update:model-value="ic.selected = !!$event" />
             <span class="text-sm font-medium">{{ ic.basename }}</span>
           </div>
         </template>

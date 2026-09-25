@@ -86,7 +86,7 @@ async function handleFilesAdded(files: File[]) {
     <div class="flex gap-2">
       <FileUpload class="grow" :data-types="SUPPORTED_IMAGE_TYPES" multiple @files-added="handleFilesAdded">
         <p class="flex justify-center gap-1 p-3">
-          <UIcon name="iconoir:upload" class="size-5" /> Drag & Drop images here or click to select
+          <UIcon name="iconoir:upload" class="size-5" aria-hidden="true" /> Drag & Drop images here or click to select
         </p>
       </FileUpload>
       <UButton
@@ -107,8 +107,8 @@ async function handleFilesAdded(files: File[]) {
         <span class="text-primary">1.</span> Resize to aspect ratio
       </h2>
       <UDropdownMenu
+        v-if="selectedCount > 0"
         :items="selectionMenuItems"
-        :class="selectedCount === 0 ? 'invisible pointer-events-none' : ''"
       >
         <UButton variant="subtle" color="neutral" size="sm" trailing-icon="iconoir:nav-arrow-down">
           {{ selectedCount }} selected
@@ -136,15 +136,16 @@ async function handleFilesAdded(files: File[]) {
             ]"
           >
             <template #select-header>
-              <UCheckbox v-model="allImagesSelected" />
+              <UCheckbox v-model="allImagesSelected" aria-label="Select all images" />
             </template>
             <template #select-cell="{ row }">
-              <UCheckbox v-model="row.original.selected" />
+              <UCheckbox v-model="row.original.selected" :aria-label="`Select ${row.original.filename}`" />
             </template>
 
             <template #resize-cell="{ row }">
               <UCheckbox
                 :model-value="row.original.resize"
+                :aria-label="`Resize ${row.original.filename}`"
                 @update:model-value="resizeStore.setImageResize(row.original, $event as boolean)"
               />
             </template>
@@ -169,7 +170,7 @@ async function handleFilesAdded(files: File[]) {
             </template>
 
             <template #empty>
-              <UIcon name="iconoir:emoji-sad" class="text-lg" /> <p>No images added yet.</p>
+              <UIcon name="iconoir:emoji-sad" class="text-lg" aria-hidden="true" /> <p>No images added yet.</p>
             </template>
           </UTable>
         </div>

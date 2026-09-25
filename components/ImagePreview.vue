@@ -7,6 +7,7 @@ const props = defineProps<{
 }>()
 
 const image = useTemplateRef('image')
+const modalOpen = ref(false)
 
 const mimeType = computed(() => props.blob?.type || 'application/octet-stream')
 
@@ -36,26 +37,37 @@ function download() {
   <div
     v-if="loading"
     name="iconoir:refresh-double"
+    role="status"
+    aria-label="Loading image"
     class="size-24 flex items-center justify-center"
   >
-    <UIcon name="iconoir:refresh-double" class="size-6 text-primary animate-spin" />
+    <UIcon name="iconoir:refresh-double" class="size-6 text-primary animate-spin" aria-hidden="true" />
   </div>
   <div
     v-else-if="!objectUrl"
+    role="img"
+    aria-label="No image available"
     class="size-24 flex items-center justify-center"
   >
     <UIcon
       name="iconoir:xmark-square"
       class="size-12 text-muted"
+      aria-hidden="true"
     />
   </div>
-  <UModal v-else>
+  <UModal v-else v-model:open="modalOpen">
     <img
       ref="image"
       :src="objectUrl"
+      :alt="title"
+      role="button"
+      tabindex="0"
+      aria-haspopup="dialog"
       class="cursor-pointer"
       width="100"
       height="100"
+      @keydown.enter.prevent="modalOpen = true"
+      @keydown.space.prevent="modalOpen = true"
     >
     <template #title>
       {{ title }}
@@ -67,6 +79,7 @@ function download() {
     <template #body>
       <img
         :src="objectUrl"
+        :alt="title"
       >
     </template>
     <template #footer>
@@ -74,6 +87,7 @@ function download() {
         variant="ghost"
         icon="iconoir:download"
         :disabled="!blob"
+        :aria-label="`Download ${title}`"
         @click="download()"
       >
         Download

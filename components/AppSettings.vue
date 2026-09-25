@@ -34,7 +34,7 @@ const { config: mergeConfig } = storeToRefs(mergeStore)
     <USeparator />
 
     <h2 class="text-lg font-semibold flex items-center gap-1">
-      <UIcon name="iconoir:expand" /> Resize settings
+      <UIcon name="iconoir:expand" aria-hidden="true" /> Resize settings
     </h2>
 
     <UFormField
@@ -47,6 +47,7 @@ const { config: mergeConfig } = storeToRefs(mergeStore)
           v-model="resizeConfig.targetAspectRatio"
           class="w-full"
           variant="outline"
+          :aria-invalid="!targetAspectRatioValid"
         >
           <template #trailing>
             <UIcon
@@ -72,6 +73,7 @@ const { config: mergeConfig } = storeToRefs(mergeStore)
             icon="iconoir:more-horiz"
             color="neutral"
             variant="outline"
+            aria-label="Aspect ratio presets"
           />
         </UDropdownMenu>
       </UFieldGroup>
@@ -120,7 +122,7 @@ const { config: mergeConfig } = storeToRefs(mergeStore)
     <USeparator />
 
     <h2 class="text-lg font-semibold flex items-center gap-1">
-      <UIcon name="iconoir:cell-2x2" /> Merge settings
+      <UIcon name="iconoir:cell-2x2" aria-hidden="true" /> Merge settings
     </h2>
 
     <UFormField
@@ -135,14 +137,16 @@ const { config: mergeConfig } = storeToRefs(mergeStore)
           :min="1"
           :max="10"
           class="w-20"
+          aria-label="Number of columns"
         />
-        <span>×</span>
+        <span aria-hidden="true">×</span>
         <UInput
           v-model.number="mergeConfig.gridRows"
           type="number"
           :min="1"
           :max="10"
           class="w-20"
+          aria-label="Number of rows"
         />
         <UDropdownMenu
           :items="[
@@ -159,6 +163,7 @@ const { config: mergeConfig } = storeToRefs(mergeStore)
             icon="iconoir:more-horiz"
             color="neutral"
             variant="outline"
+            aria-label="Grid size presets"
           />
         </UDropdownMenu>
       </div>
@@ -181,7 +186,7 @@ const { config: mergeConfig } = storeToRefs(mergeStore)
     <USeparator />
 
     <div class="flex items-start gap-2 text-sm text-muted">
-      <UIcon name="iconoir:lock" class="mt-0.5 shrink-0" />
+      <UIcon name="iconoir:lock" class="mt-0.5 shrink-0" aria-hidden="true" />
       <span>All image processing happens in your browser. No data is uploaded to any server.</span>
     </div>
   </div>
