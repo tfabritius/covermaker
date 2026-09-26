@@ -39,7 +39,7 @@
     "@nuxt/eslint": "1.17.0",
     "@nuxt/test-utils": "^4.3.2",
     "@playwright/test": "^1.50.0",
-    "eslint": "^10.10.0",
+    "eslint": "^10.11.0",
     "serve": "^14.2.6",
     "typescript": "^6.0.3",
     "vitest": "^5.0.2",
