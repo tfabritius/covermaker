@@ -22,7 +22,7 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@iconify-json/iconoir": "^1.2.11",
+    "@iconify-json/iconoir": "^1.2.12",
     "@nuxt/ui": "4.11.3",
     "@pinia/nuxt": "1.0.2",
     "@silvia-odwyer/photon": "^0.3.3",
