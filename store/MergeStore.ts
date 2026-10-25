@@ -40,12 +40,15 @@ export const useMergeStore = defineStore('merge', () => {
     const idx = images.value.findIndex(m => m.resizeId === resizeImg.id)
     if (idx === -1) {
       const srcUrl = URL.createObjectURL(resizeImg.blob)
-      images.value = [...images.value, {
-        resizeId: resizeImg.id,
-        basename: getResizedBasename(resizeImg.filename),
-        srcBlob: resizeImg.blob,
-        srcUrl,
-      }]
+      images.value = [
+        ...images.value,
+        {
+          resizeId: resizeImg.id,
+          basename: getResizedBasename(resizeImg.filename),
+          srcBlob: resizeImg.blob,
+          srcUrl,
+        },
+      ]
     }
     else if (images.value[idx]!.srcBlob !== resizeImg.blob) {
       try {
@@ -119,9 +122,15 @@ export const useMergeStore = defineStore('merge', () => {
         images: group,
         basename: `Merged image ${index + 1}`,
         // If grid config changed, force regeneration by setting targetBlob to null
-        targetBlob: (isSameImages && existingCollection && !gridConfigChanged) ? existingCollection.targetBlob : null,
-        targetUrl: (isSameImages && existingCollection && !gridConfigChanged) ? existingCollection.targetUrl : null,
-        selected: isSameImages && existingCollection ? existingCollection.selected : false,
+        targetBlob: (isSameImages && existingCollection && !gridConfigChanged)
+          ? existingCollection.targetBlob
+          : null,
+        targetUrl: (isSameImages && existingCollection && !gridConfigChanged)
+          ? existingCollection.targetUrl
+          : null,
+        selected: isSameImages && existingCollection
+          ? existingCollection.selected
+          : false,
         loading: false,
       }
     })

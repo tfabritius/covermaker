@@ -5,7 +5,9 @@ export default defineConfig({
   testDir: './tests/e2e',
   timeout: 120_000,
   expect: { timeout: 90_000 },
-  reporter: [['html']],
+  reporter: [
+    ['html'],
+  ],
   use: {
     baseURL: 'http://localhost:3001',
   },

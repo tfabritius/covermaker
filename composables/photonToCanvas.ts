@@ -50,7 +50,9 @@ export async function photonToBlob(
       }, type, quality)
     }
     catch (e) {
-      const err = e instanceof Error ? e : new Error(String(e))
+      const err = e instanceof Error
+        ? e
+        : new Error(String(e))
       reject(err)
     }
   })
