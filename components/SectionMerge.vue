@@ -23,13 +23,15 @@ const allImageCollectionsSelected = computed<boolean | 'indeterminate'>({
 
 const selectedCount = computed(() => imageCollections.value.filter(ic => ic.selected).length)
 
-const selectionMenuItems = [[
-  {
-    label: 'Download selected',
-    icon: 'iconoir:download',
-    onSelect: () => downloadSelectedImageCollections(),
-  },
-]]
+const selectionMenuItems = [
+  [
+    {
+      label: 'Download selected',
+      icon: 'iconoir:download',
+      onSelect: () => downloadSelectedImageCollections(),
+    },
+  ],
+]
 
 async function downloadSelectedImageCollections() {
   const content = await zipImages(

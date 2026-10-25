@@ -49,7 +49,9 @@ export const useResizeStore = defineStore('resize', () => {
       return 1
     }
     const [width, height] = config.value.targetAspectRatio.split(':').map(Number)
-    return (!!width && !!height) ? width / height : 1
+    return (!!width && !!height)
+      ? width / height
+      : 1
   })
 
   const images = ref<ResizeImage[]>([])
@@ -86,14 +88,21 @@ export const useResizeStore = defineStore('resize', () => {
     }
     else {
       const mergeStore = useMergeStore()
-      mergeStore.syncImage({ id: img.id, filename: img.filename, blob: img.srcBlob, url: img.srcUrl })
+      mergeStore.syncImage({
+        id: img.id,
+        filename: img.filename,
+        blob: img.srcBlob,
+        url: img.srcUrl,
+      })
     }
   }
 
   async function resizeImage(img: ResizeImage) {
     img.loading = true
 
-    const targetType = config.value.format === 'original' ? img.srcBlob.type : config.value.format
+    const targetType = config.value.format === 'original'
+      ? img.srcBlob.type
+      : config.value.format
     const outBlob = await resizeImageWithPhoton(
       img.srcBlob,
       config.value.rotate,
@@ -113,7 +122,12 @@ export const useResizeStore = defineStore('resize', () => {
     img.loading = false
 
     const mergeStore = useMergeStore()
-    mergeStore.syncImage({ id: img.id, filename: img.filename, blob: img.targetBlob, url: img.targetUrl })
+    mergeStore.syncImage({
+      id: img.id,
+      filename: img.filename,
+      blob: img.targetBlob,
+      url: img.targetUrl,
+    })
   }
 
   async function resizeImageWithPhoton(

@@ -16,7 +16,9 @@ const { isOverDropZone } = useDropZone(zoneRef, {
     if (files)
       emit('filesAdded', files)
   },
-  ...(props.dataTypes !== undefined ? { dataTypes: props.dataTypes } : {}),
+  ...(props.dataTypes !== undefined
+    ? { dataTypes: props.dataTypes }
+    : {}),
   multiple: props.multiple,
 })
 </script>

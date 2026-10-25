@@ -23,14 +23,16 @@ const allImagesSelected = computed<boolean | 'indeterminate'>({
 
 const selectedCount = computed(() => images.value.filter(img => img.selected).length)
 
-const selectionMenuItems = [[
-  {
-    label: 'Remove selected',
-    icon: 'iconoir:trash',
-    color: 'error' as const,
-    onSelect: () => resizeStore.removeSelectedImages(),
-  },
-]]
+const selectionMenuItems = [
+  [
+    {
+      label: 'Remove selected',
+      icon: 'iconoir:trash',
+      color: 'error' as const,
+      onSelect: () => resizeStore.removeSelectedImages(),
+    },
+  ],
+]
 
 const demoImagesLoading = ref(false)
 
