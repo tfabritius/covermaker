@@ -28,7 +28,7 @@
     "@silvia-odwyer/photon": "^0.3.3",
     "@vueuse/core": "^15.0.0",
     "jszip": "^3.10.2",
-    "nuxt": "^4.6.2",
+    "nuxt": "^4.6.3",
     "pinia": "^4.1.0",
     "tailwindcss": "4.3.3",
     "vue": "latest",
