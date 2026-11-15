@@ -37,7 +37,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^10.0.0",
     "@nuxt/eslint": "1.17.0",
-    "@nuxt/test-utils": "^4.3.4",
+    "@nuxt/test-utils": "^4.4.0",
     "@playwright/test": "^1.65.0",
     "eslint": "^10.14.0",
     "serve": "^14.2.7",
